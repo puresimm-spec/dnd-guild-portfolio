@@ -1,0 +1,13 @@
+# รันฐานข้อมูล PostgreSQL ในเครื่อง (ใช้ตอนพัฒนาเท่านั้น)
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dnd_guild
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # เก็บข้อมูลไว้แม้ปิด container
+volumes:
+  pgdata:

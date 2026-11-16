@@ -1,0 +1,70 @@
+{
+  "group": {
+    "name": "ชื่อกลุ่ม (ใส่ทีหลัง)",
+    "tagline": "สโลแกนของทีม (ใส่ทีหลัง)",
+    "concept": "แนวคิดของทีม (ใส่ทีหลัง)",
+    "highlights": ["จุดเด่นที่ 1", "จุดเด่นที่ 2", "จุดเด่นที่ 3"],
+    "contact": {
+      "github": "https://github.com/puresimm-spec/dnd-guild-portfolio"
+    },
+    "projects": [
+      {
+        "title": "Chat AI พร้อม Portfolio",
+        "description": "เว็บแอปให้ผู้เยี่ยมชมคุยกับ AI เพื่อสอบถามผลงานและทักษะของทีม",
+        "tech": ["React", "Express", "PostgreSQL", "Gemini API"],
+        "github_url": "https://github.com/puresimm-spec/dnd-guild-portfolio"
+      }
+    ]
+  },
+  "members": [
+    {
+      "name": "Puree Simma",
+      "nickname": "พอล (Paul)",
+      "dnd_class": "Artificer",
+      "level": 1,
+      "role": "AI Engineer",
+      "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขา AI and Data Science มหาวิทยาลัยกรุงเทพ",
+      "quote": "ใส่คำคมประจำตัวละคร (ใส่ทีหลัง)",
+      "skills": ["Python", "Google Colab", "VS Code", "Excel"],
+      "stats": { "STR": 10, "DEX": 10, "CON": 10, "INT": 10, "WIS": 10, "CHA": 10 },
+      "github_url": "https://github.com/puresimm-spec",
+      "photo": null,
+      "projects": [
+        {
+          "title": "miniProjectAie313",
+          "description": "ใส่คำอธิบายโปรเจกต์ (ใส่ทีหลัง)",
+          "tech": [],
+          "github_url": "https://github.com/puresimm-spec/miniProjectAie313"
+        }
+      ]
+    },
+    {
+      "name": "สมาชิกคนที่ 2 (ใส่ทีหลัง)",
+      "nickname": null,
+      "dnd_class": "Bard",
+      "level": 1,
+      "role": "ใส่ทีหลัง",
+      "bio": "ใส่ทีหลัง",
+      "quote": "ใส่ทีหลัง",
+      "skills": [],
+      "stats": { "STR": 10, "DEX": 10, "CON": 10, "INT": 10, "WIS": 10, "CHA": 10 },
+      "github_url": null,
+      "photo": null,
+      "projects": []
+    },
+    {
+      "name": "สมาชิกคนที่ 3 (ใส่ทีหลัง)",
+      "nickname": null,
+      "dnd_class": "Ranger",
+      "level": 1,
+      "role": "ใส่ทีหลัง",
+      "bio": "ใส่ทีหลัง",
+      "quote": "ใส่ทีหลัง",
+      "skills": [],
+      "stats": { "STR": 10, "DEX": 10, "CON": 10, "INT": 10, "WIS": 10, "CHA": 10 },
+      "github_url": null,
+      "photo": null,
+      "projects": []
+    }
+  ]
+}
