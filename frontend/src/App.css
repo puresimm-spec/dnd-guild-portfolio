@@ -1,0 +1,302 @@
+/* ธีม DnD: ไม้เข้ม + กระดาษเก่า + ทอง */
+:root {
+  --wood-dark: #1a110c;
+  --wood: #2b1d14;
+  --parchment: #f0e2bf;
+  --parchment-edge: #d9c395;
+  --ink: #3a2616;
+  --ink-soft: #6b4f35;
+  --gold: #c9a24b;
+  --gold-bright: #e6c36a;
+  --crimson: #8b2e2e;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 3rem;
+}
+.page.center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  font-family: 'Cinzel', serif;
+  color: var(--gold-bright);
+  font-size: 1.3rem;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  margin-bottom: 2.5rem;
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at top, rgba(201, 162, 75, 0.15), transparent 60%),
+    var(--wood);
+  box-shadow: 0 0 0 4px var(--wood-dark), 0 0 0 5px var(--gold), 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+.eyebrow {
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  color: var(--gold-bright);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0.2rem 0 0.6rem;
+  text-shadow: 0 2px 0 #000;
+}
+.tagline {
+  color: #e9d9b0;
+  font-size: 1.15rem;
+  font-style: italic;
+  margin: 0 0 0.8rem;
+}
+.concept {
+  color: #cdbb92;
+  max-width: 640px;
+  margin: 0 auto 1.2rem;
+  line-height: 1.7;
+}
+.highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.highlights li {
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  color: var(--gold-bright);
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.section-title {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  color: var(--gold-bright);
+  text-align: center;
+  font-size: 1.6rem;
+  margin: 0 0 1.5rem;
+}
+.section-title::before,
+.section-title::after {
+  content: '❖';
+  color: var(--gold);
+  margin: 0 0.8rem;
+  font-size: 0.9rem;
+}
+
+/* ---------- การ์ดตัวละคร ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.card {
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(255, 255, 255, 0.35), transparent 60%),
+    var(--parchment);
+  color: var(--ink);
+  border: 2px solid var(--parchment-edge);
+  border-radius: 10px;
+  padding: 1.4rem;
+  box-shadow:
+    inset 0 0 40px rgba(120, 80, 30, 0.25),
+    0 10px 24px rgba(0, 0, 0, 0.45);
+  text-align: left;
+}
+.card.wide {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.card-head {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.avatar {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  background: var(--wood);
+  color: var(--gold-bright);
+  display: grid;
+  place-items: center;
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  overflow: hidden;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card h3 {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+.nickname {
+  margin: 0.1rem 0;
+  color: var(--ink-soft);
+}
+.class-line {
+  margin: 0;
+  color: var(--crimson);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.role {
+  font-weight: 600;
+  margin: 0.4rem 0;
+}
+.bio {
+  line-height: 1.65;
+  margin: 0.4rem 0 0.8rem;
+}
+blockquote {
+  margin: 0.8rem 0;
+  padding: 0.5rem 0.9rem;
+  border-left: 4px solid var(--gold);
+  background: rgba(201, 162, 75, 0.15);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.card h4 {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-size: 0.95rem;
+  margin: 1rem 0 0.5rem;
+  color: var(--crimson);
+  border-bottom: 1px solid var(--parchment-edge);
+  padding-bottom: 0.2rem;
+}
+
+/* ---------- แถบค่าสถานะ ---------- */
+.stat {
+  display: grid;
+  grid-template-columns: 42px 1fr 70px;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+.stat-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+}
+.stat-track {
+  height: 10px;
+  border-radius: 6px;
+  background: rgba(58, 38, 22, 0.25);
+  overflow: hidden;
+}
+.stat-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--crimson), var(--gold));
+  border-radius: 6px;
+}
+.stat-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.stat-value em {
+  color: var(--ink-soft);
+  font-style: normal;
+  font-size: 0.8rem;
+}
+
+/* ---------- แท็ก / ผลงาน ---------- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+}
+.tag {
+  background: var(--wood);
+  color: var(--gold-bright);
+  border-radius: 6px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.82rem;
+}
+.projects ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.projects li {
+  margin-bottom: 0.9rem;
+}
+.projects p {
+  margin: 0.2rem 0 0.4rem;
+  line-height: 1.55;
+}
+.card-foot {
+  margin-top: 1rem;
+}
+
+/* ---------- ปุ่มทอง ---------- */
+.btn-gold {
+  display: inline-block;
+  padding: 0.45rem 1.1rem;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  color: var(--wood-dark);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+.btn-gold:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.notice {
+  text-align: center;
+  background: var(--parchment);
+  color: var(--ink);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 460px;
+}
+.notice h2 {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  margin-top: 0;
+}
+
+.page-foot {
+  text-align: center;
+  color: #8f7c58;
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}
