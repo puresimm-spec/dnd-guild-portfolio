@@ -109,7 +109,7 @@ export async function askAI(portfolio, messages) {
           'x-goog-api-key': key, // ส่ง key ทาง header (ไม่ใส่ใน URL จะได้ไม่หลุดลง log)
         },
         body,
-        signal: AbortSignal.timeout(20_000), // แต่ละครั้งรอไม่เกิน 20 วินาที
+        signal: AbortSignal.timeout(45_000), // แต่ละครั้งรอไม่เกิน 45 วินาที
       });
     } catch (err) {
       if (err.name === 'TimeoutError') throw new AIError('TIMEOUT', 'AI ตอบช้าเกินไป');
