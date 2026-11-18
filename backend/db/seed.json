@@ -1,6 +1,6 @@
 {
   "group": {
-    "name": "ชื่อกลุ่ม (ใส่ทีหลัง)",
+    "name": "Buddy Build",
     "tagline": "สโลแกนของทีม (ใส่ทีหลัง)",
     "concept": "แนวคิดของทีม (ใส่ทีหลัง)",
     "highlights": ["จุดเด่นที่ 1", "จุดเด่นที่ 2", "จุดเด่นที่ 3"],
@@ -20,13 +20,13 @@
     {
       "name": "Puree Simma",
       "nickname": "พอล (Paul)",
-      "dnd_class": "Artificer",
-      "level": 1,
-      "role": "AI Engineer",
+      "dnd_class": "Monk",
+      "level": 7,
+      "role": "Developer",
       "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขา AI and Data Science มหาวิทยาลัยกรุงเทพ",
       "quote": "ใส่คำคมประจำตัวละคร (ใส่ทีหลัง)",
       "skills": ["Python", "Google Colab", "VS Code", "Excel"],
-      "stats": { "STR": 10, "DEX": 10, "CON": 10, "INT": 10, "WIS": 10, "CHA": 10 },
+      "stats": { "STR": 7, "DEX": 10, "CON": 7, "INT": 10, "WIS": 10, "CHA": 10 },
       "github_url": "https://github.com/puresimm-spec",
       "photo": null,
       "projects": [
@@ -39,15 +39,15 @@
       ]
     },
     {
-      "name": "สมาชิกคนที่ 2 (ใส่ทีหลัง)",
-      "nickname": null,
-      "dnd_class": "Bard",
-      "level": 1,
-      "role": "ใส่ทีหลัง",
+      "name": "Yanakorn Yodudom",
+      "nickname": "เซนส์",
+      "dnd_class": "Warrior",
+      "level": "???",
+      "role": "Developer",
       "bio": "ใส่ทีหลัง",
       "quote": "ใส่ทีหลัง",
       "skills": [],
-      "stats": { "STR": 10, "DEX": 10, "CON": 10, "INT": 10, "WIS": 10, "CHA": 10 },
+      "stats": { "STR": 0, "DEX": 0, "CON": 0, "INT": 0, "WIS": 0, "CHA": 0 },
       "github_url": null,
       "photo": null,
       "projects": []
@@ -57,7 +57,7 @@
       "nickname": null,
       "dnd_class": "Ranger",
       "level": 1,
-      "role": "ใส่ทีหลัง",
+      "role": "Developer",
       "bio": "ใส่ทีหลัง",
       "quote": "ใส่ทีหลัง",
       "skills": [],
