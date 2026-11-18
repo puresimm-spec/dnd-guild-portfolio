@@ -53,18 +53,17 @@
       "projects": []
     },
     {
-      "name": "สมาชิกคนที่ 3 (ใส่ทีหลัง)",
-      "nickname": null,
+      "name": "Nattavut Wongjeen",
+      "nickname": "แม็ค",
       "dnd_class": "Ranger",
       "level": 1,
       "role": "Developer",
       "bio": "ใส่ทีหลัง",
       "quote": "ใส่ทีหลัง",
       "skills": [],
-      "stats": { "STR": 10, "DEX": 10, "CON": 10, "INT": 10, "WIS": 10, "CHA": 10 },
+      "stats": { "STR": 0, "DEX": 5, "CON": 0, "INT": 0, "WIS": 0, "CHA": 5 },
       "github_url": null,
       "photo": null,
-      "projects": []
-    }
+      "projects": []    }
   ]
 }
