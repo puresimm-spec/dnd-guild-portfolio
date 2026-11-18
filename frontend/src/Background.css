@@ -1,0 +1,65 @@
+/* พื้นหลังคงที่ (ไม่เลื่อนตามหน้า) อยู่หลังเนื้อหาทั้งหมด */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #17120d; /* สีสำรองระหว่างรอรูปโหลด */
+}
+
+.bg-image {
+  position: absolute;
+  inset: 0;
+  background: url('/bg.jpg') center / cover no-repeat;
+}
+
+/* ฟิลเตอร์มืด: ปรับตัวเลข 0.45 / 0.72 เพื่อให้รูปสว่างหรือมืดขึ้น */
+.bg-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 9, 5, 0.45), rgba(14, 9, 5, 0.72));
+}
+
+/* ประกายไฟลอยขึ้น */
+.mote {
+  position: absolute;
+  bottom: -12px;
+  border-radius: 50%;
+  background: #ffb347;
+  box-shadow: 0 0 8px 2px rgba(255, 150, 50, 0.8);
+  opacity: 0;
+  animation-name: rise-mote;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes rise-mote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  10% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift, 0px), -105vh);
+  }
+}
+
+/* ขอบจอมืดลง ให้สายตาโฟกัสตรงกลาง */
+.bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6));
+}
+
+/* คนที่ตั้งค่าลดการเคลื่อนไหวในระบบ จะได้พื้นหลังนิ่ง */
+@media (prefers-reduced-motion: reduce) {
+  .mote {
+    display: none;
+  }
+}

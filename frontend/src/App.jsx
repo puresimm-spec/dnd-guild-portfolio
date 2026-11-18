@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import './Screens.css'
+import Background from './Background.jsx'
 import ChatWidget from './ChatWidget.jsx'
 import StartScreen from './StartScreen.jsx'
 import PartyScreen from './PartyScreen.jsx'
@@ -37,6 +38,15 @@ function usePortfolio() {
 }
 
 export default function App() {
+  return (
+    <>
+      <Background />
+      <Screens />
+    </>
+  )
+}
+
+function Screens() {
   const route = useRoute()
   const { data, error, reload } = usePortfolio()
 
