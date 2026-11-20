@@ -9,14 +9,15 @@ const dbDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../db');
 const readFile = (name) => fs.readFileSync(path.join(dbDir, name), 'utf8');
 
 // Pool = กลุ่มการเชื่อมต่อที่ใช้ซ้ำได้ ไม่ต้องเปิดการเชื่อมต่อใหม่ทุกคำขอ
-const pool = new pg.Pool({
+// (export ไว้ให้เทสต์ปิดการเชื่อมต่อตอนจบ)
+export const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
   // บน Render ต้องใช้ SSL; ในเครื่องไม่ต้อง
   ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
 
 // ข้อมูลเว็บไซต์และทีมผู้พัฒนาตัวจริง (ส่วน "website" ใน seed.json)
-// ไม่ได้เก็บลงฐานข้อมูล เพราะเปลี่ยนเฉพาะตอนแก้ไฟล์ seed แล้ว restart อยู่แล้ว
+// (เทคโนโลยีที่ใช้, ลิงก์ซอร์สโค้ด) ไม่ได้เก็บลงฐานข้อมูล เพราะเปลี่ยนเฉพาะตอนแก้ไฟล์ seed แล้ว restart อยู่แล้ว
 let website = null;
 
 // ---------- เริ่มต้นระบบ: สร้างตาราง + ใส่ข้อมูล portfolio ----------
@@ -60,18 +61,23 @@ export async function setup() {
     // ผลงานของทั้งกลุ่ม (member_id = null)
     for (const p of g.projects) await addProject(null, p);
 
-    // สมาชิกทีละคน + ผลงานของเขา
-    for (const [index, m] of seed.members.entries()) {
+    // ใส่ทีละคน + ผลงานของเขา
+    //   kind = 'team'   สมาชิกจริงของกลุ่ม (seed.members) แสดงในห้องโถง
+    //   kind = 'sample' ตัวละครตัวอย่าง (seed.sample_characters) แสดงในห้องฝึก build
+    const addPerson = async (kind, m, index) => {
       const { rows } = await client.query(
         `INSERT INTO members
-           (name, nickname, dnd_class, level, role, bio, quote, skills, stats, github_url, photo, sort, en)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+           (kind, name, nickname, dnd_class, level, role, bio, quote, skills, stats, github_url, photo, portrait, sort, en)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
          RETURNING id`,                       // ขอ id ที่เพิ่งสร้างกลับมาใช้ผูกกับ projects
-        [m.name, m.nickname ?? null, m.dnd_class, m.level, m.role, m.bio, m.quote,
-         m.skills, JSON.stringify(m.stats), m.github_url ?? null, m.photo ?? null, index, en(m)]
+        [kind, m.name, m.nickname ?? null, m.dnd_class, m.level ?? 1, m.role ?? null, m.bio ?? null, m.quote ?? null,
+         m.skills ?? [], JSON.stringify(m.stats ?? {}), m.github_url ?? null, m.photo ?? null, m.portrait ?? null,
+         index, en(m)]
       );
       for (const p of m.projects ?? []) await addProject(rows[0].id, p);
-    }
+    };
+    for (const [index, m] of seed.members.entries()) await addPerson('team', m, index);
+    for (const [index, c] of (seed.sample_characters ?? []).entries()) await addPerson('sample', c, index);
 
     await client.query('COMMIT');
   } catch (err) {
@@ -85,11 +91,11 @@ export async function setup() {
 // ---------- ดึงข้อมูล portfolio ทั้งหมด (ใช้ทั้งหน้าเว็บและ AI) ----------
 export async function getPortfolio() {
   const { rows: groups } = await pool.query('SELECT * FROM group_info WHERE id = 1');
-  const { rows: members } = await pool.query('SELECT * FROM members ORDER BY sort');
+  const { rows: people } = await pool.query('SELECT * FROM members ORDER BY kind, sort');
   const { rows: projects } = await pool.query('SELECT * FROM projects ORDER BY id');
 
   // จับผลงานเข้ากับเจ้าของ: member_id ตรงกับ id สมาชิก
-  const withProjects = members.map((m) => ({
+  const withProjects = people.map((m) => ({
     ...m,
     projects: projects.filter((p) => p.member_id === m.id),
   }));
@@ -99,14 +105,15 @@ export async function getPortfolio() {
       ...groups[0],
       projects: projects.filter((p) => p.member_id === null), // ผลงานกลุ่ม
     },
-    members: withProjects,
-    website, // ข้อมูลเว็บไซต์ + ทีมผู้พัฒนาตัวจริง
+    members: withProjects.filter((m) => m.kind === 'team'), // สมาชิกจริงของกลุ่ม
+    characters: withProjects.filter((m) => m.kind === 'sample'), // ตัวละครตัวอย่างในห้องฝึก build
+    website, // ข้อมูลเว็บไซต์ (เทคโนโลยี, ซอร์สโค้ด)
   };
 }
 
-// ดึงสมาชิกหนึ่งคนตาม id (ใช้กับที่ปรึกษา build) ไม่พบ = null
-export async function getMember(id) {
-  const { rows } = await pool.query('SELECT * FROM members WHERE id = $1', [id]);
+// ดึงตัวละครตัวอย่างหนึ่งตัวตาม id (ใช้กับที่ปรึกษา build) ไม่พบหรือไม่ใช่ตัวละครตัวอย่าง = null
+export async function getCharacter(id) {
+  const { rows } = await pool.query(`SELECT * FROM members WHERE id = $1 AND kind = 'sample'`, [id]);
   return rows[0] ?? null;
 }
 

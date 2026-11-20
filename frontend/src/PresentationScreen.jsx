@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import './Presentation.css'
 import { Avatar } from './shared.jsx'
-import { useLang } from './i18n.js'
-import { DEVELOPERS, TECH_STACK } from './developer.js'
+import { localized, useLang } from './i18n.js'
+import { TECH_STACK } from './developer.js'
 import { SLIDE_ORDER, SLIDE_TEXT } from './presentation.js'
 
 // หน้า Presentation: สไลด์ 16:9 บนกระดาษ เลื่อนด้วยปุ่มลูกศร จุด หรือปุ่ม ← → บนคีย์บอร์ด
-// เป็นข้อมูลคงที่ ไม่ต้องรอ backend
-export default function PresentationScreen() {
+// ปุ่ม "บันทึกเป็น PDF" พิมพ์ทุกสไลด์ หน้าละสไลด์ (เลือกปลายทาง "Save as PDF")
+// group, members = ข้อมูลล่าสุดจาก API (seed.json) แก้ข้อมูลกลุ่ม/สมาชิกแล้วสไลด์เปลี่ยนตามเอง
+// ระหว่างโหลด สไลด์ที่ต้องใช้ข้อมูลจะยังว่างอยู่
+export default function PresentationScreen({ group, members }) {
   const { t } = useLang()
   const [index, setIndex] = useState(0)
   const last = SLIDE_ORDER.length - 1
@@ -26,12 +28,14 @@ export default function PresentationScreen() {
     return () => window.removeEventListener('keydown', onKey)
   }, [last])
 
-  const id = SLIDE_ORDER[index]
-
   return (
     <main className="page present">
-      <section className="slide" aria-roledescription={t('pr_slide')} aria-label={t('pr_counter', index + 1, SLIDE_ORDER.length)}>
-        <Slide id={id} />
+      <section
+        className="slide"
+        aria-roledescription={t('pr_slide')}
+        aria-label={t('pr_counter', index + 1, SLIDE_ORDER.length)}
+      >
+        <Slide id={SLIDE_ORDER[index]} group={group} members={members} />
       </section>
 
       <div className="slide-controls">
@@ -54,44 +58,112 @@ export default function PresentationScreen() {
         </button>
       </div>
       <p className="slide-hint">
-        {t('pr_counter', index + 1, SLIDE_ORDER.length)} · {t('pr_hint')}
+        {t('pr_counter', index + 1, SLIDE_ORDER.length)} · {t('pr_hint')} ·{' '}
+        <button type="button" className="slide-print" onClick={() => window.print()}>
+          {t('pr_pdf')}
+        </button>
       </p>
+
+      {/* ชุดสำหรับพิมพ์: แสดงเฉพาะตอนพิมพ์ ทุกสไลด์ หน้าละสไลด์ */}
+      <div className="print-deck" aria-hidden="true">
+        {SLIDE_ORDER.map((id) => (
+          <section className="slide print-slide" key={id}>
+            <Slide id={id} group={group} members={members} />
+          </section>
+        ))}
+      </div>
     </main>
   )
 }
 
-function Slide({ id }) {
+function Slide({ id, group, members = [] }) {
   const { t, lang } = useLang()
   const pick = (obj) => obj?.[lang] ?? obj?.th ?? ''
   const s = SLIDE_TEXT[id]
   const head = (
     <>
       <p className="slide-eyebrow">{pick(s.eyebrow)}</p>
-      <h1 className="slide-title">{pick(s.title)}</h1>
+      {s.title && <h1 className="slide-title">{pick(s.title)}</h1>}
     </>
   )
+  const shortName = (m) => (localized(m, lang, 'nickname') ?? m.name).split(' ')[0]
 
   switch (id) {
     case 'cover':
       return (
         <>
-          {head}
+          <p className="slide-eyebrow">{pick(s.eyebrow)}</p>
+          <h1 className="slide-title">{group?.name ?? 'Buddy Build'}</h1>
+          {group && <p className="slide-tagline">{localized(group, lang, 'tagline')}</p>}
           <p className="slide-lead">{pick(s.lead)}</p>
-          <p className="slide-sub">
-            {DEVELOPERS.map((d) => pick(d.nickname).split(' ')[0]).join(' · ')} — {pick(s.team)}
-          </p>
+          {members.length > 0 && (
+            <p className="slide-sub">
+              {members.map(shortName).join(' · ')} — {pick(s.team)}
+            </p>
+          )}
         </>
       )
-    case 'idea':
+    case 'group':
+      return (
+        <>
+          <p className="slide-eyebrow">{pick(s.eyebrow)}</p>
+          {group && (
+            <>
+              <h1 className="slide-title">{localized(group, lang, 'tagline')}</h1>
+              <p className="slide-lead">{localized(group, lang, 'concept')}</p>
+              <div className="slide-grid">
+                {(localized(group, lang, 'highlights') ?? []).map((h) => (
+                  <div className="slide-box" key={h}>
+                    {h}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      )
+    case 'team':
       return (
         <>
           {head}
-          <p className="slide-lead">{pick(s.lead)}</p>
-          <div className="slide-grid">
-            {Object.values(t('bq_goals')).map((g) => (
-              <div className="slide-box" key={g.title}>
-                <b>{g.title}</b>
-                {g.desc}
+          <div className="slide-team">
+            {members.map((m, i) => (
+              <div className="slide-dev" key={m.id} data-class={m.dnd_class.toLowerCase()}>
+                <Avatar member={m} size="md" variant={i} />
+                <b>{shortName(m)}</b>
+                <span>{m.name}</span>
+                <small>{localized(m, lang, 'role')}</small>
+                <span className="slide-dev-skills">{m.skills.slice(0, 3).join(' · ')}</span>
+                <span className="slide-dev-count">{pick(s.projects)(m.projects.length)}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )
+    case 'projects':
+      return (
+        <>
+          {head}
+          <div className="slide-projects">
+            {(group?.projects ?? []).map((p) => (
+              <div className="slide-box slide-project-main" key={`g${p.id}`}>
+                <b>{pick(s.group)}</b>
+                <strong>{localized(p, lang, 'title')}</strong>
+                <span>{p.tech?.join(' · ')}</span>
+              </div>
+            ))}
+            {members.map((m) => (
+              <div className="slide-box" key={m.id}>
+                <b>{shortName(m)}</b>
+                {m.projects.length ? (
+                  <ul>
+                    {m.projects.map((p) => (
+                      <li key={p.id}>{localized(p, lang, 'title')}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <em>{pick(s.none)}</em>
+                )}
               </div>
             ))}
           </div>
@@ -134,20 +206,16 @@ function Slide({ id }) {
           <p className="slide-lead">{pick(s.lead)}</p>
         </>
       )
-    case 'team':
+    case 'quality':
       return (
         <>
           {head}
-          <div className="slide-team">
-            {DEVELOPERS.map((d) => (
-              <div className="slide-dev" key={d.name} data-class={d.dndClass.toLowerCase()}>
-                <Avatar member={{ name: d.name, dnd_class: d.dndClass, photo: null, portrait: d.portrait }} size="md" variant={d.variant} />
-                <b>{pick(d.nickname)}</b>
-                <span>{d.name}</span>
-                <small>{pick(d.role)}</small>
-              </div>
+          <ol className="flow slide-flow">
+            {pick(s.steps).map((step) => (
+              <li key={step}>{step}</li>
             ))}
-          </div>
+          </ol>
+          <p className="slide-lead">{pick(s.lead)}</p>
         </>
       )
     case 'stack':
@@ -155,10 +223,10 @@ function Slide({ id }) {
         <>
           {head}
           <div className="slide-grid">
-            {TECH_STACK.map((group) => (
-              <div className="slide-box" key={group.items.join()}>
-                <b>{pick(group.title)}</b>
-                {group.items.join(' · ')}
+            {TECH_STACK.map((part) => (
+              <div className="slide-box" key={part.items.join()}>
+                <b>{pick(part.title)}</b>
+                {part.items.join(' · ')}
               </div>
             ))}
           </div>
@@ -173,13 +241,19 @@ function Slide({ id }) {
             <a className="btn-gold" href="#/party">
               {pick(s.hall)}
             </a>
-            <a className="btn-outline" href="#/member/1">
-              {pick(s.planner)}
+            <a className="btn-outline" href="#/chat">
+              {pick(s.chat)}
             </a>
-            <a className="btn-outline" href="#/developer">
-              {pick(s.dev)}
+            <a className="btn-outline" href="#/training">
+              {pick(s.training)}
             </a>
           </div>
+          {group?.contact && (
+            <p className="slide-contact">
+              <b>{pick(s.contact)}:</b> {group.contact.email}
+              {group.contact.github && <> · {group.contact.github.replace(/^https?:\/\//, '')}</>}
+            </p>
+          )}
         </>
       )
     default:

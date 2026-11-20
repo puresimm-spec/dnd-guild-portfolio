@@ -1,7 +1,5 @@
 /* พื้นหลังคงที่ (ไม่เลื่อนตามหน้า) อยู่หลังเนื้อหาทั้งหมด */
 .bg {
-  --px: 0; /* ตำแหน่งเมาส์ -1..1 (ตั้งจาก Background.jsx) */
-  --py: 0;
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -12,96 +10,262 @@
 .bg > * {
   position: absolute;
 }
-.bg-layer {
-  inset: 0;
-  transition: transform 0.6s ease-out; /* ให้ parallax ไหลนุ่มๆ ไม่กระตุกตามเมาส์ */
-}
 
-/* ชั้นหลัง: รูปเดียวกันเบลอเต็มจอ ใช้เติมขอบเฉพาะจอกว้าง 21:9 ขึ้นไป */
+/* ชั้นหลังสุด: รูปเบลอเต็มจอ ใช้เติมสองข้างเฉพาะจอกว้าง 21:9 ขึ้นไป (จอทั่วไปไม่ต้องวาด) */
 .bg-fill {
-  inset: -6%; /* เผื่อขอบ ไม่ให้เห็นขอบเบลอ */
+  inset: -6%;
+  display: none;
   background: url('/bg.jpg') center / cover no-repeat;
   filter: blur(26px) brightness(0.7);
-  transform: translate(calc(var(--px) * -6px), calc(var(--py) * -4px));
 }
 
-/* ชั้นรูปจริง: จอทั่วไป (ไม่เกิน 21:9) ให้เต็มจอแบบตัดขอบ รูปเป็น 16:9 จึงพอดีจอ 16:9 */
-.bg-photo {
-  inset: -2%; /* เผื่อขอบให้ parallax เลื่อนได้โดยไม่เห็นขอบ */
-  transform: translate(calc(var(--px) * -14px), calc(var(--py) * -9px));
+/* ===== ฉาก: ขนาดเท่ารูป (1920 x 1078) ขยายเต็มจอแบบตัดขอบ =====
+   --u = 1 พิกเซลของรูปหลังขยาย (100cqw = ความกว้างฉาก) ทุกชิ้นใน Background.jsx วางด้วยหน่วยนี้ */
+.bg-stage {
+  --u: calc(100cqw / 1920);
+  left: 50%;
+  top: 50%;
+  width: max(100vw, 178.108vh);
+  height: max(56.146vw, 100vh);
+  container-type: size;
+  transform: translate(-50%, -50%);
+  /* parallax ตามเมาส์: Background.jsx เขียน translate ให้ทุกเฟรม (การซูมช้าๆ ด้านล่างเหลือขอบไว้พอให้เลื่อนได้โดยไม่เห็นขอบรูป)
+     will-change ให้ฉากเป็นเลเยอร์ของการ์ดจอตลอด เลื่อนแล้วไม่ต้องวาดใหม่ */
+  will-change: translate;
+  transition: opacity 1.2s ease;
 }
-.bg-image {
+/* กล้องซูม/แพนช้าๆ เหมือนเดินในห้องโถง */
+.bg-cam {
   position: absolute;
   inset: 0;
-  background: url('/bg.jpg') center / cover no-repeat;
-  animation: ken-burns 48s ease-in-out infinite alternate; /* ซูม/แพนช้าๆ เหมือนกล้องเดินในห้องโถง */
+  animation: ken-burns 46s ease-in-out infinite alternate;
 }
 @keyframes ken-burns {
   from {
-    transform: scale(1.02) translate(0, 0);
+    transform: scale(1.02);
   }
   to {
-    transform: scale(1.09) translate(-1.2%, -1%);
+    transform: scale(1.08) translate(-1%, -0.8%);
   }
 }
-
-/* จอกว้าง 21:9 ขึ้นไป: แสดงรูปครบทั้งภาพ (ไม่ตัด) แล้วใช้รูปเบลอเติมสองข้าง */
+/* จอกว้าง 21:9 ขึ้นไป: แสดงรูปครบทั้งภาพ (ไม่ตัด ไม่ซูม) แล้วใช้รูปเบลอเติมสองข้าง */
 @media (min-aspect-ratio: 21/9) {
-  .bg-photo {
-    inset: 0;
+  .bg-fill {
+    display: block;
   }
-  .bg-image {
-    background-size: contain;
-    animation: none; /* ไม่ซูม จะได้เห็นรูปครบจริง */
+  .bg-stage {
+    width: 178.108vh;
+    height: 100vh;
+  }
+  .bg-cam {
+    animation: none;
   }
 }
 
-/* ฟิลเตอร์มืด: ปรับตัวเลข 0.45 / 0.72 เพื่อให้รูปสว่างหรือมืดขึ้น */
+.bg-cam > *,
+.bg-lantern > * {
+  position: absolute;
+}
+.bg-base {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* รูปที่ลบโคมแขวน/ขนนกออกแล้ว: ค่อยๆ ทับรูปเดิมพร้อมกับชิ้นที่ตัดออก จึงสลับได้เนียน */
+.bg-base.clean,
+.bg-lantern img,
+.bg-quill img {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.bg.live .bg-base.clean,
+.bg.live .bg-lantern img,
+.bg.live .bg-quill img {
+  opacity: 1;
+}
+/* รูปพวกนี้เพิ่งถูกใส่ตอนพร้อมแล้ว: ให้เริ่มจากโปร่งใสแล้วค่อยจางเข้า (เบราว์เซอร์เก่าจะสลับทันที ซึ่งก็ไม่เห็นความต่าง) */
+@starting-style {
+  .bg.live .bg-base.clean,
+  .bg.live .bg-lantern img,
+  .bg.live .bg-quill img {
+    opacity: 0;
+  }
+}
+.bg-lantern img,
+.bg-quill img {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* แสงจากหน้าต่างสามบาน ค่อยๆ สว่าง-จาง */
+.bg-shafts {
+  left: calc(var(--u) * 679);
+  top: calc(var(--u) * 249);
+  width: calc(var(--u) * 697);
+  height: calc(var(--u) * 575);
+  animation: bg-breathe 9s ease-in-out infinite alternate;
+}
+@keyframes bg-breathe {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* โคมแขวน: แกว่งรอบจุดแขวนบนเชือก (ความยาว/จังหวะของแต่ละดวงตั้งใน Background.jsx) */
+.bg.live .bg-lantern {
+  animation-name: bg-swing;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes bg-swing {
+  from {
+    transform: rotate(calc(var(--amp) * -1));
+  }
+  to {
+    transform: rotate(var(--amp));
+  }
+}
+/* ขนนกในขวดหมึกโยกเบาๆ */
+.bg.live .bg-quill {
+  --amp: 2.2deg;
+  animation: bg-swing 3.8s ease-in-out infinite alternate;
+}
+
+/* แสงของโคมแต่ละดวง วูบวาบแบบไม่สม่ำเสมอ */
+.bg-glow {
+  width: calc(var(--u) * 150);
+  height: calc(var(--u) * 150);
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 140, 0.55), rgba(255, 170, 70, 0.16) 36%, transparent 68%);
+  animation-name: bg-flick;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes bg-flick {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  21% {
+    opacity: 1;
+  }
+  38% {
+    opacity: 0.62;
+  }
+  55% {
+    opacity: 0.92;
+  }
+  74% {
+    opacity: 0.7;
+  }
+  88% {
+    opacity: 1;
+  }
+}
+
+/* โคมใหญ่บนเคาน์เตอร์: แสงอุ่นตกบนกระดาษและมือ */
+.bg-desk {
+  left: calc(var(--u) * 1702);
+  top: calc(var(--u) * 868);
+}
+.bg-desk span {
+  position: absolute;
+  border-radius: 50%;
+  translate: -50% -50%;
+}
+.bg-desk .outer {
+  width: calc(var(--u) * 820);
+  height: calc(var(--u) * 640);
+  background: radial-gradient(ellipse, rgba(255, 186, 96, 0.26), rgba(255, 150, 60, 0.08) 45%, transparent 70%);
+  animation:
+    bg-flick 4.3s ease-in-out infinite,
+    bg-desk-sway 6.1s ease-in-out infinite alternate;
+}
+.bg-desk .core {
+  width: calc(var(--u) * 260);
+  height: calc(var(--u) * 330);
+  background: radial-gradient(ellipse, rgba(255, 245, 190, 0.5), rgba(255, 200, 110, 0.18) 45%, transparent 70%);
+  animation: bg-flick 2.7s ease-in-out -1.1s infinite;
+}
+@keyframes bg-desk-sway {
+  from {
+    transform: translateX(-1%) scale(0.97);
+  }
+  to {
+    transform: translateX(1%) scale(1.04);
+  }
+}
+/* ห้องที่มีไฟสว่างหลังซุ้มประตูด้านซ้าย */
+.bg-arch {
+  left: calc(var(--u) * -240);
+  top: calc(var(--u) * 180);
+  width: calc(var(--u) * 560);
+  height: calc(var(--u) * 760);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 160, 70, 0.24), transparent 65%);
+  animation: bg-flick 5.2s ease-in-out -2s infinite;
+}
+
+/* ฝุ่นลอยในแสงหน้าต่าง และหิ่งห้อยใต้ต้นไม้ */
+.bg-speck {
+  border-radius: 50%;
+  opacity: 0;
+  animation-name: bg-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.bg-speck.dust {
+  --o: 0.75;
+  background: rgba(225, 250, 250, 0.9);
+  box-shadow: 0 0 5px rgba(200, 245, 245, 0.8);
+}
+.bg-speck.fly {
+  --o: 0.9;
+  background: #ffd27a;
+  box-shadow: 0 0 10px 3px rgba(255, 180, 70, 0.75);
+}
+@keyframes bg-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  25% {
+    opacity: var(--o);
+  }
+  50% {
+    transform: translate(var(--dx), var(--dy));
+  }
+  75% {
+    opacity: calc(var(--o) * 0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dx) * -0.4), calc(var(--dy) * 1.8));
+  }
+}
+
+/* ===== ชั้นทับฉาก ===== */
+/* ฟิลเตอร์มืดให้อ่านเนื้อหาง่าย: ปรับตัวเลข 0.45 / 0.72 เพื่อให้รูปสว่างหรือมืดขึ้น */
 .bg-shade {
   inset: 0;
   background: linear-gradient(180deg, rgba(14, 9, 5, 0.45), rgba(14, 9, 5, 0.72));
 }
 
-/* ลำแสงจากหน้าต่างด้านบน แกว่งช้าๆ */
-.bg-rays {
-  top: -20%;
-  left: -10%;
-  width: 90%;
-  height: 140%;
-  background: repeating-linear-gradient(
-    105deg,
-    transparent 0 7%,
-    rgba(255, 214, 150, 0.07) 9%,
-    transparent 13% 19%,
-    rgba(255, 214, 150, 0.045) 21%,
-    transparent 24% 30%
-  );
-  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
-  /* ไม่ใช้ mix-blend-mode กับชั้นที่ขยับ: ทำให้เบราว์เซอร์ต้องวาดใหม่ทุกเฟรม (กระตุกในบางเครื่อง) */
-  transform-origin: 30% 0;
-  will-change: transform, opacity;
-  animation: rays-sway 18s ease-in-out infinite alternate;
-}
-@keyframes rays-sway {
-  from {
-    transform: rotate(-2deg);
-    opacity: 0.65;
-  }
-  to {
-    transform: rotate(2.5deg);
-    opacity: 1;
-  }
-}
-
-/* แสงคบเพลิงสองข้าง: วูบวาบแบบค่อยๆ ไหล (ไม่กระโดดเป็นขั้น) ใช้แค่ opacity/transform ให้ลื่นบนการ์ดจอ
-   ความไม่สม่ำเสมอมาจากสองแอนิเมชันที่รอบยาวไม่เท่ากัน ซ้อนกัน จึงไม่ซ้ำจังหวะเดิมง่ายๆ */
+/* แสงคบเพลิงสองข้าง (หรี่กว่าเดิม เพราะในฉากมีโคมส่องแสงอยู่แล้ว): วูบวาบแบบค่อยๆ ไหล
+   ความไม่สม่ำเสมอมาจากสองแอนิเมชันที่รอบยาวไม่เท่ากัน ซ้อนกัน */
 .bg-torch {
   top: 10%;
   width: 46vmax;
   height: 46vmax;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 150, 60, 0.3), rgba(255, 110, 30, 0.11) 38%, transparent 68%);
-  will-change: opacity, transform;
+  background: radial-gradient(circle, rgba(255, 150, 60, 0.18), rgba(255, 110, 30, 0.066) 38%, transparent 68%);
   animation:
     torch-flicker 5.3s ease-in-out infinite,
     torch-breathe 7s ease-in-out infinite alternate;
@@ -147,18 +311,17 @@
   }
 }
 
-/* หมอกบางๆ เลื่อนช้าๆ ด้านล่าง */
+/* หมอกบางๆ เลื่อนช้าๆ ด้านล่าง (ไม่ใช้ filter: blur เพราะต้องคำนวณใหม่ทุกเฟรม ไล่สีให้นุ่มแทน) */
 .bg-fog {
   left: -50%;
   bottom: -8%;
   width: 200%;
   height: 38%;
   background:
-    radial-gradient(ellipse 22% 55% at 18% 70%, rgba(210, 190, 160, 0.13), transparent 70%),
-    radial-gradient(ellipse 26% 50% at 47% 78%, rgba(210, 190, 160, 0.1), transparent 70%),
-    radial-gradient(ellipse 20% 60% at 72% 68%, rgba(210, 190, 160, 0.12), transparent 70%),
-    radial-gradient(ellipse 24% 50% at 93% 76%, rgba(210, 190, 160, 0.1), transparent 70%);
-  filter: blur(8px);
+    radial-gradient(ellipse 22% 55% at 18% 70%, rgba(210, 190, 160, 0.12), transparent 75%),
+    radial-gradient(ellipse 26% 50% at 47% 78%, rgba(210, 190, 160, 0.09), transparent 75%),
+    radial-gradient(ellipse 20% 60% at 72% 68%, rgba(210, 190, 160, 0.11), transparent 75%),
+    radial-gradient(ellipse 24% 50% at 93% 76%, rgba(210, 190, 160, 0.09), transparent 75%);
   animation: fog-drift 70s linear infinite;
 }
 @keyframes fog-drift {
@@ -167,36 +330,6 @@
   }
   to {
     transform: translateX(25%);
-  }
-}
-
-/* ฝุ่นลอยในลำแสง */
-.dust {
-  border-radius: 50%;
-  background: rgba(255, 236, 200, 0.85);
-  box-shadow: 0 0 4px rgba(255, 230, 180, 0.7);
-  opacity: 0;
-  animation-name: dust-float;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-@keyframes dust-float {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0);
-  }
-  25% {
-    opacity: 0.6;
-  }
-  50% {
-    transform: translate(14px, -18px);
-  }
-  75% {
-    opacity: 0.45;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-6px, -34px);
   }
 }
 
@@ -234,20 +367,127 @@
   background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6));
 }
 
-/* คนที่ตั้งค่าลดการเคลื่อนไหวในระบบ จะได้พื้นหลังนิ่ง (ยังมีแสงคบเพลิงแต่ไม่กะพริบ) */
+/* ===== โหมดเบา (เครื่องสเปกต่ำ หรือ ?bg=lite): โคมไม่แกว่ง ไม่มีฝุ่น/หมอก/ประกายไฟ แสงนิ่ง เหลือแค่ซูมช้าๆ ===== */
+.bg.lite .bg-speck,
+.bg.lite .bg-fog,
+.bg.lite .mote {
+  display: none;
+}
+.bg.lite .bg-glow,
+.bg.lite .bg-desk span,
+.bg.lite .bg-arch,
+.bg.lite .bg-shafts,
+.bg.lite .bg-torch {
+  animation: none;
+}
+
+/* คนที่ตั้งค่าลดการเคลื่อนไหวในระบบ จะได้พื้นหลังนิ่ง (ยังมีแสงแต่ไม่กะพริบ) */
 @media (prefers-reduced-motion: reduce) {
+  .bg-speck,
   .mote,
-  .dust,
   .bg-fog {
     display: none;
   }
-  .bg-image,
-  .bg-rays,
+  .bg-cam,
+  .bg-glow,
+  .bg-desk span,
+  .bg-arch,
+  .bg-shafts,
   .bg-torch {
     animation: none;
   }
-  .bg-layer {
-    transform: none;
+  .bg-stage {
     transition: none;
+  }
+}
+
+/* ---------- ข้างนอกกิลด์ (หน้าแรก): ไม่มีรูป ท้องฟ้ายามค่ำแทน ---------- */
+/* สลับเข้า/ออกแบบค่อยๆ จาง เหมือนเดินจากข้างนอกเข้ามาในห้องโถง */
+.bg-fill,
+.bg-torch,
+.bg-night {
+  transition: opacity 1.2s ease;
+}
+.bg-night {
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse 120% 70% at 50% 0%, #1b2140 0%, #121428 45%, #0b0a12 100%);
+}
+.bg.outside .bg-night {
+  opacity: 1;
+}
+.bg.outside .bg-fill,
+.bg.outside .bg-stage,
+.bg.outside .bg-torch {
+  opacity: 0;
+}
+/* ฉากห้องโถงมองไม่เห็นแล้ว: หยุดแอนิเมชันข้างใน ไม่ให้เครื่องทำงานฟรี */
+.bg.outside .bg-cam,
+.bg.outside .bg-cam * {
+  animation-play-state: paused;
+}
+
+/* ดาว: จุดเล็กๆ หลายชั้น กะพริบช้าๆ */
+.bg-stars {
+  position: absolute;
+  inset: 0 0 35% 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 14%, #fff, transparent),
+    radial-gradient(1px 1px at 19% 32%, #dfe6ff, transparent),
+    radial-gradient(1.5px 1.5px at 31% 9%, #fff, transparent),
+    radial-gradient(1px 1px at 44% 26%, #cfd8ff, transparent),
+    radial-gradient(2px 2px at 57% 12%, #fff6dc, transparent),
+    radial-gradient(1px 1px at 66% 38%, #dfe6ff, transparent),
+    radial-gradient(1.5px 1.5px at 78% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 89% 30%, #cfd8ff, transparent),
+    radial-gradient(1px 1px at 95% 8%, #fff, transparent);
+  animation: stars-twinkle 5s ease-in-out infinite alternate;
+}
+.bg-stars.far {
+  background-image:
+    radial-gradient(1px 1px at 4% 40%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 14% 5%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 26% 46%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 38% 18%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 50% 42%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 61% 4%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 72% 28%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 84% 44%, #aab4e0, transparent),
+    radial-gradient(1px 1px at 92% 22%, #aab4e0, transparent);
+  animation-duration: 7s;
+  animation-delay: -3s;
+}
+@keyframes stars-twinkle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* แสงอุ่นจากประตูกิลด์ ลอดขึ้นมาจากขอบล่างกลางจอ */
+.bg-doorglow {
+  position: absolute;
+  left: 50%;
+  bottom: -18vh;
+  width: 70vmax;
+  height: 46vh;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 170, 80, 0.32), rgba(255, 130, 50, 0.1) 45%, transparent 70%);
+  animation: doorglow-breathe 6s ease-in-out infinite alternate;
+}
+@keyframes doorglow-breathe {
+  from {
+    opacity: 0.75;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bg-stars,
+  .bg-doorglow {
+    animation: none;
   }
 }

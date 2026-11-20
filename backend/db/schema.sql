@@ -58,3 +58,9 @@ CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id
 ALTER TABLE group_info ADD COLUMN IF NOT EXISTS en JSONB NOT NULL DEFAULT '{}';
 ALTER TABLE members    ADD COLUMN IF NOT EXISTS en JSONB NOT NULL DEFAULT '{}';
 ALTER TABLE projects   ADD COLUMN IF NOT EXISTS en JSONB NOT NULL DEFAULT '{}';
+
+-- members เก็บทั้งสมาชิกจริงของกลุ่มและตัวละครตัวอย่างในห้องฝึก build
+--   kind = 'team' สมาชิกจริง, 'sample' ตัวละครตัวอย่าง
+--   portrait = ชื่อภาพพิกเซลครึ่งตัวใน frontend/src/portraits.js (เช่น 'paul')
+ALTER TABLE members ADD COLUMN IF NOT EXISTS kind TEXT NOT NULL DEFAULT 'team';
+ALTER TABLE members ADD COLUMN IF NOT EXISTS portrait TEXT;

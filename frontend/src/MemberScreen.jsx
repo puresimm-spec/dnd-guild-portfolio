@@ -8,7 +8,8 @@ import BuildQuestBoard from './BuildQuestBoard.jsx'
 // ต้องตรงกับ FREE_POINTS ใน backend/src/index.js (AI ใช้คำนวณแต้มที่เหลือ)
 const FREE_POINTS = 4
 
-// หน้ารายละเอียดของผู้เล่นหนึ่งคน (index เริ่มจาก 1 ตามลำดับในหน้าปาร์ตี้)
+// หน้าวางแผน build ของตัวละครตัวอย่างหนึ่งตัวในห้องฝึก build (index เริ่มจาก 1)
+// members = ตัวละครตัวอย่าง (data.characters) ไม่ใช่สมาชิกจริงของกลุ่ม
 export default function MemberScreen({ members, index }) {
   const { t } = useLang()
   const member = Number.isInteger(index) ? members[index - 1] : undefined
@@ -19,8 +20,8 @@ export default function MemberScreen({ members, index }) {
         <div className="notice">
           <h2>{t('nf_title')}</h2>
           <p>{t('nf_body')}</p>
-          <a className="btn-gold" href="#/party">
-            {t('back_hall_btn')}
+          <a className="btn-gold" href="#/training">
+            {t('tr_back_btn')}
           </a>
         </div>
       </main>
@@ -33,13 +34,13 @@ export default function MemberScreen({ members, index }) {
   return (
     <main className="page">
       <nav className="topbar">
-        <a href="#/party">{t('back_hall')}</a>
+        <a href="#/training">{t('tr_back')}</a>
         <span className="pager">
-          {prev ? <a href={`#/member/${prev}`}>{t('prev')}</a> : <span className="disabled">{t('prev')}</span>}
+          {prev ? <a href={`#/training/${prev}`}>{t('prev')}</a> : <span className="disabled">{t('prev')}</span>}
           <em>
             {index} / {members.length}
           </em>
-          {next ? <a href={`#/member/${next}`}>{t('next')}</a> : <span className="disabled">{t('next')}</span>}
+          {next ? <a href={`#/training/${next}`}>{t('next')}</a> : <span className="disabled">{t('next')}</span>}
         </span>
       </nav>
 

@@ -240,3 +240,125 @@
     min-height: 60vh;
   }
 }
+
+/* ---------- บันทึกเป็น PDF (พิมพ์ทุกสไลด์ หน้าละสไลด์) ---------- */
+.slide-print {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--gold-bright);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.print-deck {
+  display: none;
+}
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  /* ซ่อนทุกอย่างที่ไม่ใช่สไลด์ */
+  .bg,
+  .keeper-nav,
+  .lang-switch,
+  .page.present > .slide,
+  .slide-controls,
+  .slide-hint {
+    display: none !important;
+  }
+  .page.present {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .print-deck {
+    display: block;
+  }
+  .print-slide {
+    width: 100%;
+    max-height: none;
+    aspect-ratio: auto;
+    height: calc(210mm - 16mm - 4px); /* เต็มหน้า A4 แนวนอน หักขอบกระดาษ */
+    box-shadow: none;
+    border: 2px solid #d9c395;
+    animation: none;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-slide:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+  .print-slide .pixel-sprite {
+    animation: none;
+  }
+}
+
+/* ---------- สไลด์ที่ใช้ข้อมูลจริง: สโลแกน, ทักษะ/จำนวนผลงานของสมาชิก, รายการผลงาน, ช่องทางติดต่อ ---------- */
+.slide-tagline {
+  margin: 0;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--crimson);
+}
+.slide-dev-skills {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.slide-dev-count {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--class-color);
+}
+.slide-projects {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem;
+}
+.slide-project-main {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border-left: 5px solid var(--gold);
+}
+.slide-project-main strong {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-size: 1.05rem;
+}
+.slide-project-main span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.slide-projects ul {
+  margin: 0.2rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.slide-projects em {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+.slide-contact {
+  margin: 0.3rem 0 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+.slide-contact b {
+  color: var(--ink);
+}

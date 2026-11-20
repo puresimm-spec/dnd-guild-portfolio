@@ -770,8 +770,7 @@
   border: 2px solid var(--gold);
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(26, 17, 12, 0.85);
-  backdrop-filter: blur(4px);
+  background: rgba(26, 17, 12, 0.94); /* ไม่ใช้ backdrop-filter: พื้นหลังขยับทุกเฟรม ต้องเบลอใหม่ทุกเฟรม */
 }
 .lang-switch button {
   border: none;

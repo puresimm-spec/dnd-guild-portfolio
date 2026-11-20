@@ -1,0 +1,108 @@
+# CI/CD: ทุก push และ Pull Request เข้า main จะเทสต์ backend + build frontend
+# ถ้าผ่านทั้งคู่ และเป็นการ push เข้า main จะสั่ง Render deploy ผ่าน Deploy Hook
+#
+# ตั้งค่าครั้งเดียว:
+#   1) Render: Settings ของทั้ง 2 service -> Auto-Deploy = Off (ให้ pipeline นี้เป็นคนสั่ง deploy)
+#   2) Render: Settings -> Deploy Hook -> คัดลอก URL ของแต่ละ service
+#   3) GitHub: Settings -> Secrets and variables -> Actions -> New repository secret
+#        RENDER_DEPLOY_HOOK_BACKEND  = Deploy Hook ของ Web Service (backend)
+#        RENDER_DEPLOY_HOOK_FRONTEND = Deploy Hook ของ Static Site (frontend)
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# push ซ้อนกันเร็วๆ ให้ยกเลิกรอบเก่า เหลือรอบล่าสุดรอบเดียว
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend · check + test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    # PostgreSQL จริงสำหรับเทสต์ที่ต่อฐานข้อมูล (db.integration.test.js)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: dnd_guild
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - name: Syntax check
+        run: npm run check
+      - name: Tests (API, AI layer with a fake Gemini, real Postgres)
+        run: npm test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/dnd_guild
+          DATABASE_SSL: 'false'
+
+  frontend:
+    name: Frontend · lint + test + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Tests (D&D formulas)
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Keep the built site as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
+
+  deploy:
+    name: Deploy to Render
+    needs: [backend, frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deploy hooks
+        env:
+          BACKEND_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_BACKEND }}
+          FRONTEND_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND }}
+        run: |
+          deploy() {
+            if [ -z "$2" ]; then
+              echo "::warning::$1: secret ยังไม่ได้ตั้ง ข้ามการ deploy (ดูวิธีตั้งที่หัวไฟล์นี้)"
+              return 0
+            fi
+            curl -fsS -X POST "$2" > /dev/null
+            echo "$1: สั่ง deploy แล้ว"
+          }
+          deploy backend "$BACKEND_HOOK"
+          deploy frontend "$FRONTEND_HOOK"

@@ -1,0 +1,295 @@
+/* ---------- ลานต้อนรับ: Guild Keeper + กล่องคำพูด + เมนูแบบเกม ---------- */
+main.page.lobby {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(200px, 300px) minmax(0, 560px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+/* ===== Guild Keeper ===== */
+.lobby-keeper {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  animation: lobby-rise 0.9s ease-out both;
+}
+.lobby-keeper-art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+}
+/* แสงเวทมนตร์ด้านหลัง + เงาที่พื้น */
+.lobby-keeper-art::before {
+  content: '';
+  position: absolute;
+  inset: 4% 0 10%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, rgba(138, 106, 224, 0.5), rgba(138, 106, 224, 0.12) 50%, transparent 70%);
+  animation: lobby-aura 3.2s ease-in-out infinite alternate;
+}
+.lobby-keeper-art::after {
+  content: '';
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 1%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.55), transparent 70%);
+}
+.lobby-keeper-art .pixel-sprite {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.45));
+}
+.lobby-keeper figcaption {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright);
+  padding: 0.25rem 1.1rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: rgba(26, 17, 12, 0.85);
+}
+
+/* ===== กล่องคำพูด ===== */
+.lobby-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.lobby-dialog {
+  position: relative;
+  padding: 1.5rem 1.4rem 1.1rem;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(43, 29, 20, 0.96), rgba(26, 17, 12, 0.96));
+  box-shadow: 0 0 0 4px var(--wood-dark), 0 0 0 5px var(--gold), 0 16px 34px rgba(0, 0, 0, 0.5);
+  animation: lobby-rise 0.8s 0.15s ease-out both;
+}
+/* หางกล่องคำพูดชี้ไปทาง Guild Keeper */
+.lobby-dialog::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: 2.2rem;
+  width: 22px;
+  height: 22px;
+  rotate: 45deg;
+  background: #26190f;
+  border-left: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+}
+.lobby-speaker {
+  position: absolute;
+  top: -0.85rem;
+  left: 1.1rem;
+  padding: 0.1rem 0.8rem;
+  border-radius: 6px;
+  font: 700 0.85rem 'Cinzel', 'Sarabun', serif;
+  letter-spacing: 0.06em;
+  color: var(--wood-dark);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+}
+.lobby-say {
+  margin: 0;
+  min-height: 5.1em; /* กันกล่องยืด/หดเวลาข้อความเปลี่ยน */
+  color: var(--parchment);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+/* กดตรงไหนในกล่องก็ได้ เพื่อแสดงข้อความทั้งหมดทันที */
+.lobby-say-skip {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+.lobby-say-skip:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.lobby-say-more {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--gold-bright);
+  animation: lobby-blink 0.9s steps(2, jump-none) infinite;
+}
+
+/* ===== เมนู ===== */
+.lobby-menu {
+  animation: lobby-rise 0.8s 0.3s ease-out both;
+}
+.lobby-menu-title {
+  margin: 0 0 0.5rem 0.2rem;
+  font: 700 0.8rem 'Cinzel', 'Sarabun', serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.lobby-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.lobby-menu li {
+  animation: lobby-slide 0.5s calc(0.45s + var(--i) * 0.07s) ease-out both;
+}
+.lobby-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(201, 162, 75, 0.45);
+  border-radius: 10px;
+  background: rgba(26, 17, 12, 0.82);
+  color: var(--parchment);
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    translate 0.18s ease;
+}
+.lobby-num {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  font: 700 0.8rem 'Cinzel', serif;
+  color: var(--gold-bright);
+  background: rgba(43, 29, 20, 0.9);
+}
+.lobby-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.lobby-text strong {
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+}
+.lobby-text small {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: #cdbb92;
+}
+.lobby-cursor {
+  flex: none;
+  color: var(--gold-bright);
+  opacity: 0;
+  translate: -6px 0;
+  transition:
+    opacity 0.18s ease,
+    translate 0.18s ease;
+}
+.lobby-item:hover,
+.lobby-item:focus-visible {
+  background: linear-gradient(90deg, rgba(201, 162, 75, 0.22), rgba(26, 17, 12, 0.9));
+  border-color: var(--gold-bright);
+  translate: 4px 0;
+}
+.lobby-item:hover .lobby-cursor,
+.lobby-item:focus-visible .lobby-cursor {
+  opacity: 1;
+  translate: 0 0;
+  animation: lobby-nudge 0.7s ease-in-out infinite alternate;
+}
+.lobby-item:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+/* ออกไปข้างนอก: เด่นน้อยกว่าเมนูอื่น */
+.lobby-item.leave {
+  background: transparent;
+  border-style: dashed;
+}
+.lobby-item.leave .lobby-text strong {
+  color: #cdbb92;
+}
+
+@keyframes lobby-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes lobby-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+@keyframes lobby-aura {
+  to {
+    opacity: 0.6;
+    transform: scale(0.94);
+  }
+}
+@keyframes lobby-blink {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes lobby-nudge {
+  to {
+    translate: 3px 0;
+  }
+}
+
+/* จอแคบ: Guild Keeper อยู่ด้านบน (เล็กลง) กล่องคำพูดและเมนูอยู่ด้านล่าง */
+@media (max-width: 760px) {
+  main.page.lobby {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 1.6rem;
+    padding-top: 4rem; /* เว้นที่ให้ปุ่มสลับภาษามุมขวาบน */
+  }
+  .lobby-keeper {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .lobby-keeper-art {
+    width: 120px;
+  }
+  /* ชื่ออยู่บนกล่องคำพูดแล้ว ไม่ต้องซ้ำใต้ตัวละคร */
+  .lobby-keeper figcaption {
+    display: none;
+  }
+  /* หางกล่องคำพูดชี้ขึ้นไปหา Guild Keeper */
+  .lobby-dialog::before {
+    left: 50%;
+    top: -14px;
+    margin-left: -11px;
+    rotate: 135deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lobby-keeper,
+  .lobby-dialog,
+  .lobby-menu,
+  .lobby-menu li,
+  .lobby-keeper-art::before,
+  .lobby-say-more,
+  .lobby-item:hover .lobby-cursor,
+  .lobby-item:focus-visible .lobby-cursor {
+    animation: none;
+  }
+}

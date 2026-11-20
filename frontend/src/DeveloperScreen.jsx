@@ -1,10 +1,11 @@
-import { Avatar, GithubButton } from './shared.jsx'
+import { GithubButton } from './shared.jsx'
 import { localized, useLang } from './i18n.js'
-import { DEVELOPERS, REPO_URL, TECH_STACK } from './developer.js'
+import { REPO_URL, TECH_STACK } from './developer.js'
 
-// หน้าข้อมูลผู้พัฒนาเว็บไซต์ (ข้อมูลมาจาก developer.js ไม่ต้องรอ backend)
-// projects = ผลงานของทีม (จาก seed.json ผ่าน API) ระหว่างโหลดจะยังไม่แสดงส่วนนี้
-export default function DeveloperScreen({ projects }) {
+// เบื้องหลังเว็บไซต์: เกี่ยวกับโปรเจกต์ ระบบทำงานอย่างไร การตรวจคุณภาพ (CI/CD) และเทคโนโลยี
+// (สมาชิกและผลงานของกลุ่มอยู่ในห้องโถง) ข้อมูลคงที่ ไม่ต้องรอ backend
+// members = สมาชิกจากข้อมูลจริง ใช้ทำแถบเครดิตท้ายหน้า (ระหว่างโหลดจะยังไม่แสดง)
+export default function DeveloperScreen({ members }) {
   const { t, lang } = useLang()
   const pick = (obj) => obj?.[lang] ?? obj?.th ?? ''
 
@@ -16,79 +17,6 @@ export default function DeveloperScreen({ projects }) {
         <p className="concept">{t('dev_intro')}</p>
         <GithubButton href={REPO_URL}>{t('dev_source')}</GithubButton>
       </section>
-
-      <section>
-        <h2 className="section-title">{t('dev_team')}</h2>
-        <div className="dev-grid">
-          {DEVELOPERS.map((d) => (
-            <article className="card dev-card" key={d.name} data-class={d.dndClass.toLowerCase()}>
-              <header className="dev-head">
-                <div className="dev-portrait">
-                  <Avatar
-                    member={{ name: d.name, dnd_class: d.dndClass, photo: null, portrait: d.portrait }}
-                    size="lg"
-                    variant={d.variant}
-                  />
-                </div>
-                <span className="dev-class">{d.dndClass}</span>
-                <h3>{d.name}</h3>
-                <p className="nickname">{pick(d.nickname)}</p>
-                <p className="dev-role">{pick(d.role)}</p>
-              </header>
-
-              <p className="bio dev-bio">{pick(d.bio)}</p>
-
-              {d.skills.length > 0 && (
-                <div className="dev-skills">
-                  <h4>{t('skills')}</h4>
-                  <div className="tags">
-                    {d.skills.map((s) => (
-                      <span className="tag" key={s}>
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {d.github && (
-                <div className="dev-foot">
-                  <GithubButton href={d.github}>{t('github_of', pick(d.nickname))}</GithubButton>
-                </div>
-              )}
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {projects?.length > 0 && (
-        <section>
-          <h2 className="section-title">{t('dev_projects_title')}</h2>
-          <div className="dev-projects">
-            {projects.map((p) => (
-              <article className="card dev-project" key={p.id ?? p.title}>
-                <p className="dev-project-eyebrow">{t('dev_projects_eyebrow')}</p>
-                <h3>{localized(p, lang, 'title')}</h3>
-                <p className="dev-project-desc">{localized(p, lang, 'description')}</p>
-                {p.tech?.length > 0 && (
-                  <div className="tags">
-                    {p.tech.map((tech) => (
-                      <span className="tag" key={tech}>
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                {p.github_url && (
-                  <div className="dev-project-foot">
-                    <GithubButton href={p.github_url}>{t('view_code')}</GithubButton>
-                  </div>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
 
       <section>
         <h2 className="section-title">{t('dev_project_title')}</h2>
@@ -113,6 +41,18 @@ export default function DeveloperScreen({ projects }) {
       </section>
 
       <section>
+        <h2 className="section-title">{t('dev_quality_title')}</h2>
+        <div className="stack-grid">
+          {t('dev_quality').map((q) => (
+            <div className="card stack-card" key={q.title}>
+              <h4>{q.title}</h4>
+              <p className="quality-body">{q.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
         <h2 className="section-title">{t('dev_stack_title')}</h2>
         <div className="stack-grid">
           {TECH_STACK.map((group) => (
@@ -129,6 +69,22 @@ export default function DeveloperScreen({ projects }) {
           ))}
         </div>
       </section>
+
+      {members?.length > 0 && (
+        <section className="credits">
+          <h2 className="section-title">{t('dev_credits')}</h2>
+          <ul className="credit-list">
+            {members.map((m, i) => (
+              <li key={m.id}>
+                <a href={`#/member/${i + 1}`}>
+                  <strong>{(localized(m, lang, 'nickname') ?? m.name).split(' ')[0]}</strong>
+                  <span>{localized(m, lang, 'role')}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <footer className="page-foot">{t('dev_footer')}</footer>
     </main>

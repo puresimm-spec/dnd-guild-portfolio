@@ -1,0 +1,247 @@
+/* ---------- ตัวนำทาง Guild Keeper (แทนแถบแท็บเดิม) + ระยะหน้า + การเปลี่ยนหน้าแบบนุ่มนวล ---------- */
+:root {
+  --nav-h: 4.1rem; /* พื้นที่ด้านบนที่เว้นให้ปุ่ม Guild Keeper และปุ่มภาษา */
+}
+
+/* แถบโปร่งใสด้านบน ติดจอตอนเลื่อน กดทะลุได้ ยกเว้นตัวปุ่มและกล่องเมนู */
+.keeper-nav {
+  position: sticky;
+  top: 0;
+  z-index: 55;
+  height: var(--nav-h);
+  pointer-events: none;
+}
+.keeper-nav > * {
+  pointer-events: auto;
+}
+
+/* ===== ปุ่ม: หน้า Guild Keeper ในวงกลม + ป้าย "ไปไหนต่อ?" ===== */
+.keeper-nav-btn {
+  position: absolute;
+  top: 0.6rem;
+  left: max(0.8rem, env(safe-area-inset-left, 0px));
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 1rem 0 0;
+  height: 2.9rem;
+  border: 2px solid var(--gold);
+  border-radius: 999px;
+  background: rgba(26, 17, 12, 0.94); /* ไม่ใช้ backdrop-filter: พื้นหลังขยับทุกเฟรม ต้องเบลอใหม่ทุกเฟรม */
+  color: var(--gold-bright);
+  font: 700 0.95rem 'Sarabun', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  transition:
+    background 0.18s ease,
+    translate 0.18s ease;
+}
+.keeper-nav-btn:hover {
+  background: rgba(43, 29, 20, 0.95);
+  translate: 0 -1px;
+}
+.keeper-nav-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.keeper-nav-face {
+  position: relative;
+  width: 3.4rem;
+  height: 3.4rem;
+  margin: -0.4rem 0 -0.4rem -0.3rem;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: radial-gradient(circle at 50% 42%, rgba(138, 106, 224, 0.6), #1a110c 72%);
+  overflow: hidden;
+}
+/* ซูมให้เห็นแค่ช่วงบนของตัวละคร (หน้า + หมวก) */
+.keeper-nav-face .pixel-sprite {
+  width: 150%;
+  height: 150%;
+  margin: 6% 0 0 -25%;
+  animation: none;
+}
+.keeper-nav-btn[aria-expanded='true'] .keeper-nav-face {
+  box-shadow: 0 0 14px 2px rgba(138, 106, 224, 0.6);
+}
+
+/* ===== กล่องคำพูด + เมนู ===== */
+.keeper-pop {
+  position: absolute;
+  top: 4rem;
+  left: max(0.8rem, env(safe-area-inset-left, 0px));
+  width: min(420px, calc(100vw - 1.6rem));
+  max-height: calc(100dvh - 5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.4rem 0.9rem 0.9rem;
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(43, 29, 20, 0.98), rgba(26, 17, 12, 0.98));
+  box-shadow: 0 0 0 4px var(--wood-dark), 0 0 0 5px var(--gold), 0 20px 44px rgba(0, 0, 0, 0.6);
+  transform-origin: 1.6rem -0.5rem;
+  animation: keeper-pop-in 0.26s cubic-bezier(0.2, 0.8, 0.3, 1.15) both;
+}
+/* หางกล่องคำพูดชี้ขึ้นไปที่ Guild Keeper */
+.keeper-pop::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 1.25rem;
+  width: 18px;
+  height: 18px;
+  rotate: 135deg;
+  background: #2b1d14;
+  border-left: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+}
+.keeper-pop-say {
+  position: relative;
+  margin: 0 0.2rem 0.9rem;
+}
+.keeper-pop-say .lobby-speaker {
+  top: -1.15rem;
+  left: 0;
+}
+.keeper-pop .lobby-say {
+  min-height: 3.4em;
+  font-size: 0.97rem;
+}
+.keeper-pop .lobby-say-skip {
+  border-radius: 8px;
+}
+.keeper-pop .lobby-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.keeper-pop .lobby-list li {
+  animation: lobby-slide 0.35s calc(0.05s + var(--i) * 0.04s) ease-out both;
+}
+.keeper-pop .lobby-item {
+  padding: 0.5rem 0.75rem;
+  gap: 0.7rem;
+}
+.keeper-pop .lobby-num {
+  width: 1.9rem;
+  height: 1.9rem;
+  font-size: 0.72rem;
+}
+.keeper-pop .lobby-text strong {
+  font-size: 0.98rem;
+}
+.keeper-pop .lobby-text small {
+  font-size: 0.8rem;
+}
+
+/* หน้าที่อยู่ตอนนี้ */
+.lobby-item[aria-current='page'] {
+  border-color: var(--gold);
+  background: linear-gradient(90deg, rgba(201, 162, 75, 0.16), rgba(26, 17, 12, 0.9));
+}
+.lobby-here {
+  flex: none;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--wood-dark);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+}
+
+@keyframes keeper-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-6px);
+  }
+}
+
+/* ===== ระยะของหน้า ===== */
+/* หน้าแรก (ข้างนอกกิลด์) ไม่มีตัวนำทาง จึงเต็มจอพอดี */
+.start {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+/* เนื้อหาอยู่กลางจอทั้งแนวนอนและแนวตั้ง ไม่ว่าจะซูมหรือจอกว้างแค่ไหน
+   - แนวนอน: .page กว้างไม่เกิน 1100px และ margin auto อยู่แล้ว
+   - แนวตั้ง: หน้าที่เนื้อหาสั้นกว่าจอจะอยู่ตรงกลาง ถ้ายาวกว่าจอก็เลื่อนลงตามปกติ
+     ("safe center" กันไม่ให้หัวหน้าถูกตัดหายตอนเนื้อหายาวกว่าจอ) */
+.page:not(.center) {
+  min-height: calc(100vh - var(--nav-h));
+  min-height: calc(100dvh - var(--nav-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: safe center;
+}
+
+@media (max-width: 700px) {
+  /* แถบด้านบนเว้นที่ให้ปุ่มภาษาแล้ว ไม่ต้องเว้นหัวหน้าเพิ่ม */
+  .page {
+    padding-top: 1.5rem;
+  }
+  .keeper-nav-label {
+    font-size: 0.88rem;
+  }
+}
+
+/* ===== เปลี่ยนหน้าแบบนุ่มนวล (View Transitions, ดู useRoute.js) ===== */
+/* ใส่ชื่อให้ .page เฉพาะตอนกำลังเปลี่ยนหน้า: หน้าเก่าจางขึ้นไป หน้าใหม่ลอยขึ้นมา ส่วนพื้นหลังกับปุ่มต่างๆ อยู่นิ่ง */
+html.page-switching .page {
+  view-transition-name: page;
+}
+/* Guild Keeper มุมซ้ายบน (และกล่องเมนูที่เปิดอยู่) แยกเป็นอีกชั้น อยู่เหนือหน้าระหว่างเปลี่ยนหน้า ไม่ถูกหน้าเก่าทับ */
+html.page-switching .keeper-nav {
+  view-transition-name: keeper-nav;
+}
+::view-transition-group(keeper-nav) {
+  animation: none;
+}
+::view-transition-old(keeper-nav) {
+  animation: vt-fade-out 0.25s ease-in both;
+}
+::view-transition-new(keeper-nav) {
+  animation: none;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+::view-transition-group(page) {
+  animation: none;
+}
+::view-transition-old(page) {
+  animation: vt-page-out 0.3s ease-in both;
+}
+::view-transition-new(page) {
+  animation: vt-page-in 0.55s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+}
+@keyframes vt-page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+    filter: blur(3px);
+  }
+}
+@keyframes vt-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keeper-pop,
+  .keeper-pop .lobby-list li {
+    animation: none;
+  }
+}

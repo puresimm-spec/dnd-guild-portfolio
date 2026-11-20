@@ -1,0 +1,293 @@
+/* ---------- หน้า Portfolio: ห้องโถง, โปรไฟล์สมาชิก, ช่องทางติดต่อ, ห้องฝึก build, เบื้องหลังเว็บ ---------- */
+
+/* ===== ห้องโถง: การ์ดสมาชิก (ใช้สไตล์ .dev-card เดิม + ทั้งการ์ดกดได้) ===== */
+.team-card {
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+.team-card:hover {
+  border-color: var(--class-color);
+  box-shadow:
+    inset 0 0 40px rgba(120, 80, 30, 0.25),
+    0 14px 30px rgba(0, 0, 0, 0.5),
+    0 0 0 2px var(--class-color);
+}
+.team-card:focus-visible {
+  outline: 3px solid var(--gold-bright);
+  outline-offset: 3px;
+}
+.team-card .dev-bio {
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* ในการ์ดย่อไว้ 4 บรรทัด อ่านเต็มในหน้าโปรไฟล์ */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.team-card-cta {
+  margin: 1rem 1.4rem 0;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--parchment-edge);
+  text-align: center;
+  font-weight: 700;
+  color: var(--class-color);
+}
+
+/* ===== ช่องทางติดต่อ ===== */
+.contact-card {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1rem 1.4rem;
+}
+.contact-row {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0;
+}
+.contact-row + .contact-row {
+  border-top: 1px dashed var(--parchment-edge);
+}
+.contact-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--wood);
+  color: var(--gold-bright);
+  font-size: 1.1rem;
+}
+.contact-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.contact-label {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.contact-value {
+  font-weight: 700;
+  color: var(--crimson);
+  overflow-wrap: anywhere;
+}
+.contact-copy {
+  font: 600 0.82rem 'Sarabun', sans-serif;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--parchment-edge);
+  border-radius: 6px;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+.contact-copy:hover {
+  border-color: var(--gold);
+}
+
+/* ===== โปรไฟล์สมาชิก ===== */
+.profile-page {
+  max-width: 980px;
+}
+.profile-card {
+  padding: 0;
+  overflow: hidden;
+}
+.profile-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: center;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--class-color) 26%, transparent), transparent 75%);
+  border-top: 6px solid var(--class-color);
+}
+.profile-id {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-width: 0;
+}
+.profile-id .dev-class {
+  margin-top: 0;
+}
+.profile-id h1 {
+  margin: 0.3rem 0 0;
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.profile-id .nickname {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.profile-role {
+  margin: 0.4rem 0 0;
+  font-weight: 700;
+  color: var(--class-color);
+  font-size: 1.05rem;
+}
+.profile-role span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  padding: 1.75rem 2rem 2rem;
+}
+.profile-section h2 {
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.25rem;
+  font: 700 1rem 'Cinzel', 'Sarabun', serif;
+  color: var(--crimson);
+  border-bottom: 1px solid var(--parchment-edge);
+}
+.profile-bio {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+.profile-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.profile-project {
+  padding: 1rem 1.2rem;
+  border-left: 4px solid var(--class-color);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 0 8px 8px 0;
+}
+.profile-project h3 {
+  margin: 0;
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-size: 1.1rem;
+}
+.profile-project p {
+  margin: 0.35rem 0 0.6rem;
+  line-height: 1.75;
+  max-width: 68ch;
+}
+.profile-empty {
+  margin: 0;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.profile-contact {
+  margin-top: 2.5rem;
+}
+
+/* ===== ห้องฝึก build ===== */
+.training-steps {
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.2rem 0 0;
+  padding: 0;
+}
+.training-steps li {
+  counter-increment: step;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  background: rgba(26, 17, 12, 0.6);
+  color: var(--parchment);
+  font-size: 0.9rem;
+}
+.training-steps li::before {
+  content: counter(step) '. ';
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+
+/* ===== เบื้องหลังเว็บ ===== */
+.quality-body {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+.credit-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.credit-list a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: rgba(26, 17, 12, 0.7);
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.credit-list a:hover {
+  transform: translateY(-2px);
+}
+.credit-list strong {
+  font-family: 'Cinzel', 'Sarabun', serif;
+  color: var(--gold-bright);
+}
+.credit-list span {
+  font-size: 0.82rem;
+  color: #cdbb92;
+}
+
+@media (max-width: 640px) {
+  .profile-head {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+    padding: 1.25rem;
+  }
+  .profile-id {
+    align-items: center;
+  }
+  .profile-actions {
+    justify-content: center;
+  }
+  .profile-body {
+    padding: 1.25rem;
+  }
+  .contact-row {
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+  }
+  .contact-copy {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .credit-list a {
+    transition: none;
+  }
+}
+
+/* การ์ดโปรไฟล์ใหญ่ ไม่ต้องลอยขึ้นตอนชี้เมาส์เหมือนการ์ดย่อ */
+.profile-card:hover {
+  transform: none;
+}

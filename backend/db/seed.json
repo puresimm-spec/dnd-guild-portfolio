@@ -1,121 +1,177 @@
 {
   "group": {
     "name": "Buddy Build",
-    "tagline": "ทุกคลาสมี build ที่ใช่ เราช่วยคุณหาให้เจอ",
-    "concept": "เราคือกิลด์ที่ช่วยนักผจญภัยออกแบบ build ตัวละครของแต่ละคลาส ให้เดินไปตามสายที่ผู้เล่นอยากเป็นได้อย่างเต็มศักยภาพ ไม่ว่าจะเป็นสายถึกทน สายโจมตี สายสนับสนุน หรือสายผสม เราช่วยให้ทุกการเลือกมีเหตุผลรองรับ",
+    "tagline": "สามคน สามคลาส หนึ่งปาร์ตี้",
+    "concept": "พวกเราคือนักศึกษาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ 3 คน ที่รวมตัวกันเหมือนปาร์ตี้ผจญภัยใน Dungeons & Dragons แต่ละคนถนัดคนละสาย แล้วช่วยกันสร้างเว็บพอร์ตโฟลิโอที่มี AI คอยตอบคำถามจากข้อมูลจริงของทีม",
     "highlights": [
-      "มีตัวละครตัวอย่างหลายคลาส ลองย้ายแต้มและวาง build ได้ทันที",
-      "ออกแบบตามสายที่ต้องการ เริ่มจากเป้าหมายของผู้เล่น แล้วเลือกทักษะและอุปกรณ์ให้เข้ากับสาย",
-      "อธิบายให้เข้าใจง่าย บอกว่าทำไมจึงเลือกแบบนี้"
+      "แบ่งงานตามความถนัด: วางโครง Backend · พัฒนา Frontend · รวบรวมข้อมูล",
+      "AI ตอบจากข้อมูลจริงของกลุ่มและสมาชิกทุกคนเท่านั้น และเก็บประวัติแชตในฐานข้อมูล",
+      "ธีม D&D ทั้งเว็บ ตัวละครพิกเซลวาดด้วยโค้ด พร้อมห้องฝึก build ให้ลองเล่น",
+      "มี CI/CD เทสต์และ deploy ขึ้นเว็บให้อัตโนมัติ"
     ],
     "contact": {
+      "email": "pure.simm@bumail.net",
       "github": "https://github.com/puresimm-spec/dnd-guild-portfolio"
     },
     "projects": [
       {
-        "title": "Chat AI พร้อม Portfolio",
-        "description": "เว็บแอปให้ผู้เยี่ยมชมคุยกับ AI เพื่อสอบถามผลงานและทักษะของทีม",
+        "title": "Buddy Build: Guild Portfolio + Chat AI",
+        "description": "เว็บพอร์ตโฟลิโอของกลุ่มในธีม D&D ผู้เยี่ยมชมดูข้อมูลกลุ่มและสมาชิก แล้วคุยกับ Guild Keeper (AI) ที่ตอบจากข้อมูลจริงของทีม มีห้องฝึก build ที่ AI ช่วยวาง build ตัวละคร",
         "tech": [
           "React",
+          "Vite",
           "Express",
           "PostgreSQL",
-          "Gemini API"
+          "Gemini API",
+          "GitHub Actions",
+          "Render"
         ],
         "github_url": "https://github.com/puresimm-spec/dnd-guild-portfolio",
         "en": {
-          "title": "Chat AI Portfolio",
-          "description": "A web app where visitors chat with an AI to learn about the team’s work and skills."
+          "title": "Buddy Build: Guild Portfolio + Chat AI",
+          "description": "Our group’s D&D-themed portfolio site. Visitors browse the group and its members, then chat with the Guild Keeper, an AI that answers from the team’s real data. A bonus training hall lets the AI help plan character builds."
         }
       }
     ],
     "en": {
-      "tagline": "Every class has the right build. We help you find it.",
-      "concept": "We are a guild that helps adventurers design a character build for every class, so each character can follow the path its player wants at full potential. Tank, damage, support or hybrid, we make sure every choice has a reason behind it.",
+      "tagline": "Three classes, one party.",
+      "concept": "We are three Artificial Intelligence and Data Science Engineering students at Bangkok University who teamed up like an adventuring party in Dungeons & Dragons. Each of us has our own strengths, and together we built a portfolio site with an AI that answers questions from the team’s real data.",
       "highlights": [
-        "Sample characters across many classes. Move their points and plan a build right away",
-        "Built around your goal: start from what the player wants, then pick skills and gear that fit the path",
-        "Clear explanations of why each choice was made"
+        "Work split by strengths: backend structure · frontend · portfolio data",
+        "The AI answers only from the real data of the group and every member, and chat history is stored in the database",
+        "D&D theme throughout, pixel characters drawn in code, plus a training hall for trying out builds",
+        "CI/CD that tests and deploys automatically"
       ]
     }
   },
-  "website": {
-    "_note": "ข้อมูลทีมผู้พัฒนาจริง ใช้ให้ Guild Keeper (AI) ตอบ ต้องแก้ให้ตรงกับ frontend/src/developer.js เสมอ",
-    "about": "เว็บพอร์ตโฟลิโอธีม Dungeons & Dragons ของกิลด์ Buddy Build ผู้เยี่ยมชมดูการ์ดตัวละคร ลองปรับค่าสถานะ คุยกับ Guild Keeper (AI) และให้ AI ช่วยแนะนำ build ได้",
-    "source_code": "https://github.com/puresimm-spec/dnd-guild-portfolio",
-    "tech": {
-      "หน้าเว็บ (Frontend)": [
-        "React",
-        "Vite",
-        "CSS",
-        "SVG pixel art"
-      ],
-      "เซิร์ฟเวอร์ (Backend)": [
-        "Node.js",
-        "Express"
-      ],
-      "ข้อมูลและ AI": [
-        "PostgreSQL",
-        "Google Gemini API"
-      ],
-      "ขึ้นระบบ (Deployment)": [
-        "Render",
-        "GitHub",
-        "Docker (ตอนพัฒนา)"
-      ]
-    },
-    "developers": [
-      {
-        "name": "Puree Simma",
-        "nickname": "พอล (Paul)",
-        "dnd_class": "Monk",
-        "role": "AI Engineer · นักพัฒนา",
-        "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขาวิชาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ ใช้ Python ประมวลผลและวิเคราะห์ข้อมูล ตอนนี้กำลังศึกษา Git, การออกแบบฐานข้อมูล และ Docker สื่อสารได้ทั้งภาษาไทยและภาษาอังกฤษ",
-        "skills": [
-          "Python",
-          "Google Colab",
-          "VS Code",
-          "Excel",
-          "GitLab",
-          "dbdiagram.io",
-          "Docker"
-        ],
-        "github_url": "https://github.com/puresimm-spec"
-      },
-      {
-        "name": "Yanakorn Yodudom",
-        "nickname": "เซนส์ (Sense)",
-        "dnd_class": "Warrior",
-        "role": "Aspiring AI/ML Engineer · นักพัฒนา",
-        "bio": "นักศึกษาปริญญาตรีวิศวกรรมศาสตร์ สาขา AI and Data Science มหาวิทยาลัยกรุงเทพ (2024–ปัจจุบัน) สนใจ AI และ Machine Learning อยากรู้ว่าโมเดลทำงานอย่างไร มีพื้นฐาน Python การทำความสะอาดข้อมูล และฐานข้อมูล เคยสร้างโมเดลจริงในโปรเจกต์ ใช้ภาษาอังกฤษได้ระดับ C2 และภาษาไทยเป็นภาษาแม่",
-        "skills": [
-          "Python",
-          "SQL",
-          "MySQL",
-          "PostgreSQL",
-          "pandas",
-          "scikit-learn",
-          "ER Diagram"
-        ],
-        "github_url": null
-      },
-      {
-        "name": "Nattavut Wongjeen",
-        "nickname": "แม็ค (Max)",
-        "dnd_class": "Ranger",
-        "role": "AI & Data Science Student · นักพัฒนา",
-        "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขาวิชาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ สนใจการนำข้อมูลและ AI มาช่วยแก้ปัญหาจริง กำลังฝึก Python และการออกแบบฐานข้อมูล ร่วมพัฒนาเว็บไซต์นี้",
-        "skills": [
-          "Python",
-          "Google Colab",
-          "VS Code",
-          "SQL",
-          "PostgreSQL"
-        ],
-        "github_url": null
-      }
-    ]
-  },
   "members": [
+    {
+      "name": "Puree Simma",
+      "nickname": "พอล (Paul)",
+      "dnd_class": "Monk",
+      "portrait": "paul",
+      "role": "วางโครงสร้าง Backend",
+      "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขาวิชาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ ใช้ Python ประมวลผลและวิเคราะห์ข้อมูล ตอนนี้กำลังศึกษา Git, การออกแบบฐานข้อมูล และ Docker สื่อสารได้ทั้งภาษาไทยและภาษาอังกฤษ",
+      "skills": [
+        "Python",
+        "Google Colab",
+        "VS Code",
+        "Excel",
+        "GitLab",
+        "dbdiagram.io",
+        "Docker"
+      ],
+      "github_url": "https://github.com/puresimm-spec",
+      "projects": [
+        {
+          "title": "miniProjectAie313",
+          "description": "มินิโปรเจกต์วิชาฐานข้อมูล \"Database Final Boss\"",
+          "tech": [],
+          "github_url": "https://github.com/puresimm-spec/miniProjectAie313",
+          "en": {
+            "title": "miniProjectAie313",
+            "description": "Database course mini project, “Database Final Boss”."
+          }
+        }
+      ],
+      "en": {
+        "nickname": "Paul",
+        "role": "Backend structure",
+        "bio": "B.Eng. student in Artificial Intelligence and Data Science Engineering at Bangkok University. Uses Python for data processing and analysis, and is currently learning Git, database design and Docker. Speaks Thai and English."
+      }
+    },
+    {
+      "name": "Yanakorn Yodudom",
+      "nickname": "เซนส์ (Sense)",
+      "dnd_class": "Warrior",
+      "portrait": "sense",
+      "role": "พัฒนา Frontend",
+      "bio": "นักศึกษาปริญญาตรีวิศวกรรมศาสตร์ สาขา AI and Data Science มหาวิทยาลัยกรุงเทพ (2024–ปัจจุบัน) สนใจ AI และ Machine Learning อยากรู้ว่าโมเดลทำงานอย่างไร มีพื้นฐาน Python การทำความสะอาดข้อมูล และฐานข้อมูล เคยสร้างโมเดลจริงในโปรเจกต์ ใช้ภาษาอังกฤษได้ระดับ C2 และภาษาไทยเป็นภาษาแม่",
+      "skills": [
+        "Python",
+        "SQL",
+        "MySQL",
+        "PostgreSQL",
+        "pandas",
+        "scikit-learn",
+        "ER Diagram"
+      ],
+      "github_url": null,
+      "projects": [
+        {
+          "title": "Smartphone Use Before Bed and Sleep Quality",
+          "description": "สำรวจพฤติกรรมใช้มือถือก่อนนอนกับคุณภาพการนอนด้วย Google Forms (39 คำตอบ) ทำความสะอาดข้อมูลด้วย pandas สร้างกราฟ 3 แบบ และโมเดล Decision Tree ทำนายคะแนนคุณภาพการนอน (1–5) พร้อมเครื่องมือให้ผู้ใช้ลองกรอกพฤติกรรมของตัวเอง ทำเป็นทีม 3 คน",
+          "tech": [
+            "Python",
+            "pandas",
+            "matplotlib",
+            "seaborn",
+            "scikit-learn",
+            "Google Forms"
+          ],
+          "github_url": null,
+          "en": {
+            "title": "Smartphone Use Before Bed and Sleep Quality",
+            "description": "Surveyed pre-bedtime phone habits and sleep quality with Google Forms (39 responses), cleaned the data with pandas, made three charts, and built a Decision Tree model that predicts a 1–5 sleep-quality score, plus a tool where users enter their own habits. Team of 3."
+          }
+        },
+        {
+          "title": "Chatbot Prototype",
+          "description": "แชตบอตต้นแบบด้วย Python ที่ตอบตามรูปแบบคำถามที่กำหนดไว้ ทดสอบกับบทสนทนาตัวอย่างเพื่อหาจุดที่ตอบไม่ได้ และวางแผนปรับปรุงให้รองรับเจตนาของผู้ใช้ได้กว้างขึ้น",
+          "tech": [
+            "Python"
+          ],
+          "github_url": null,
+          "en": {
+            "title": "Chatbot Prototype",
+            "description": "A Python chatbot prototype that answers a set of predefined inputs, tested with sample conversations to find where replies failed, with planned improvements for broader intent handling."
+          }
+        },
+        {
+          "title": "Database Analysis and Design",
+          "description": "วิเคราะห์และออกแบบฐานข้อมูลเชิงสัมพันธ์ ใช้ Primary Key และ Foreign Key กำหนดความสัมพันธ์และรักษาความถูกต้องของข้อมูล และเปรียบเทียบ Data Lake กับ Data Warehouse ว่าแบบไหนเหมาะกับงานแบบใด",
+          "tech": [
+            "MySQL",
+            "PostgreSQL",
+            "ER Diagram"
+          ],
+          "github_url": null,
+          "en": {
+            "title": "Database Analysis and Design",
+            "description": "Analyzed and designed relational databases, using primary and foreign keys to define relationships and keep data consistent, and compared data lakes with data warehouses."
+          }
+        }
+      ],
+      "en": {
+        "nickname": "Sense",
+        "role": "Frontend development",
+        "bio": "B.Eng. student in Artificial Intelligence and Data Science at Bangkok University (2024–present). Curious about how AI and machine learning models work, with a solid foundation in Python, data cleaning and databases, and hands-on experience building models. English (C2), Thai (native)."
+      }
+    },
+    {
+      "name": "Nattavut Wongjeen",
+      "nickname": "แม็ค (Max)",
+      "dnd_class": "Ranger",
+      "portrait": "max",
+      "role": "รวบรวมและให้ข้อมูลของทีม",
+      "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขาวิชาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ สนใจการนำข้อมูลและ AI มาช่วยแก้ปัญหาจริง กำลังฝึก Python และการออกแบบฐานข้อมูล",
+      "skills": [
+        "Python",
+        "Google Colab",
+        "VS Code",
+        "SQL",
+        "PostgreSQL"
+      ],
+      "github_url": null,
+      "projects": [],
+      "en": {
+        "nickname": "Max",
+        "role": "Team data & content",
+        "bio": "B.Eng. student in Artificial Intelligence and Data Science at Bangkok University. Interested in using data and AI to solve real problems, currently building skills in Python and database design."
+      }
+    }
+  ],
+  "sample_characters": [
     {
       "name": "Brannoc Ironvow",
       "nickname": null,
@@ -140,7 +196,6 @@
       },
       "github_url": null,
       "photo": null,
-      "projects": [],
       "en": {
         "role": "Build path: Tank",
         "bio": "An oath-sworn knight who guards the front line. A sample character a player built for the Tank path: move the points around, then ask the Guild Keeper which feats and gear keep him standing longest.",
@@ -171,7 +226,6 @@
       },
       "github_url": null,
       "photo": null,
-      "projects": [],
       "en": {
         "role": "Build path: Damage",
         "bio": "A mage from the Ashen Library. A sample spell-damage character: try raising INT or CON first, and let the AI pick the spells that make the most of every slot.",
@@ -202,7 +256,6 @@
       },
       "github_url": null,
       "photo": null,
-      "projects": [],
       "en": {
         "role": "Build path: Support",
         "bio": "A cleric of the dawn. A sample support character: let the AI plan heals and buffs that keep the whole party alive longer.",
@@ -233,12 +286,37 @@
       },
       "github_url": null,
       "photo": null,
-      "projects": [],
       "en": {
         "role": "Build path: Hybrid",
         "bio": "A silent prowler who never walks a single path. A sample hybrid character: ask the AI about multiclassing for agility, damage and skills outside combat.",
         "quote": "The best build is the one your enemy cannot read."
       }
     }
-  ]
+  ],
+  "website": {
+    "about": "เว็บพอร์ตโฟลิโอของกลุ่ม Buddy Build ในธีม Dungeons & Dragons มีห้องโถงแนะนำกลุ่มและสมาชิก หน้าแชตกับ Guild Keeper (AI) ที่ตอบจากข้อมูลจริงของทีม ห้องฝึก build (โบนัส) ที่ AI ช่วยวาง build ตัวละครตัวอย่าง และพรีเซนเทชันในเว็บ",
+    "source_code": "https://github.com/puresimm-spec/dnd-guild-portfolio",
+    "tech": {
+      "หน้าเว็บ (Frontend)": [
+        "React",
+        "Vite",
+        "CSS",
+        "SVG pixel art"
+      ],
+      "เซิร์ฟเวอร์ (Backend)": [
+        "Node.js",
+        "Express"
+      ],
+      "ข้อมูลและ AI": [
+        "PostgreSQL",
+        "Google Gemini API"
+      ],
+      "ทดสอบและขึ้นระบบ": [
+        "node:test",
+        "GitHub Actions (CI/CD)",
+        "Render",
+        "Docker (ตอนพัฒนา)"
+      ]
+    }
+  }
 }
