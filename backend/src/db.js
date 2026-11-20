@@ -15,6 +15,10 @@ const pool = new pg.Pool({
   ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
 
+// ข้อมูลเว็บไซต์และทีมผู้พัฒนาตัวจริง (ส่วน "website" ใน seed.json)
+// ไม่ได้เก็บลงฐานข้อมูล เพราะเปลี่ยนเฉพาะตอนแก้ไฟล์ seed แล้ว restart อยู่แล้ว
+let website = null;
+
 // ---------- เริ่มต้นระบบ: สร้างตาราง + ใส่ข้อมูล portfolio ----------
 export async function setup() {
   // 1) สร้างตาราง (ถ้ายังไม่มี)
@@ -25,6 +29,7 @@ export async function setup() {
   //    หมายเหตุ: ทุกครั้งที่ server เริ่ม จะเขียนทับข้อมูล portfolio ด้วย seed.json
   //    (seed.json คือแหล่งข้อมูลหลัก) แต่ประวัติแชตไม่ถูกแตะ
   const seed = JSON.parse(readFile('seed.json'));
+  website = seed.website ?? null;
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -93,7 +98,14 @@ export async function getPortfolio() {
       projects: projects.filter((p) => p.member_id === null), // ผลงานกลุ่ม
     },
     members: withProjects,
+    website, // ข้อมูลเว็บไซต์ + ทีมผู้พัฒนาตัวจริง
   };
+}
+
+// ดึงสมาชิกหนึ่งคนตาม id (ใช้กับที่ปรึกษา build) ไม่พบ = null
+export async function getMember(id) {
+  const { rows } = await pool.query('SELECT * FROM members WHERE id = $1', [id]);
+  return rows[0] ?? null;
 }
 
 // ---------- ประวัติแชต ----------

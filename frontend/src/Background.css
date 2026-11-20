@@ -1,5 +1,7 @@
 /* พื้นหลังคงที่ (ไม่เลื่อนตามหน้า) อยู่หลังเนื้อหาทั้งหมด */
 .bg {
+  --px: 0; /* ตำแหน่งเมาส์ -1..1 (ตั้งจาก Background.jsx) */
+  --py: 0;
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -7,23 +9,182 @@
   pointer-events: none;
   background: #17120d; /* สีสำรองระหว่างรอรูปโหลด */
 }
+.bg > * {
+  position: absolute;
+}
+.bg-layer {
+  inset: 0;
+  transition: transform 0.6s ease-out; /* ให้ parallax ไหลนุ่มๆ ไม่กระตุกตามเมาส์ */
+}
 
+/* ชั้นหลัง: รูปเดียวกันเบลอเต็มจอ ใช้เติมขอบเฉพาะจอกว้าง 21:9 ขึ้นไป */
+.bg-fill {
+  inset: -6%; /* เผื่อขอบ ไม่ให้เห็นขอบเบลอ */
+  background: url('/bg.jpg') center / cover no-repeat;
+  filter: blur(26px) brightness(0.7);
+  transform: translate(calc(var(--px) * -6px), calc(var(--py) * -4px));
+}
+
+/* ชั้นรูปจริง: จอทั่วไป (ไม่เกิน 21:9) ให้เต็มจอแบบตัดขอบ รูปเป็น 16:9 จึงพอดีจอ 16:9 */
+.bg-photo {
+  inset: -2%; /* เผื่อขอบให้ parallax เลื่อนได้โดยไม่เห็นขอบ */
+  transform: translate(calc(var(--px) * -14px), calc(var(--py) * -9px));
+}
 .bg-image {
   position: absolute;
   inset: 0;
   background: url('/bg.jpg') center / cover no-repeat;
+  animation: ken-burns 48s ease-in-out infinite alternate; /* ซูม/แพนช้าๆ เหมือนกล้องเดินในห้องโถง */
+}
+@keyframes ken-burns {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.09) translate(-1.2%, -1%);
+  }
+}
+
+/* จอกว้าง 21:9 ขึ้นไป: แสดงรูปครบทั้งภาพ (ไม่ตัด) แล้วใช้รูปเบลอเติมสองข้าง */
+@media (min-aspect-ratio: 21/9) {
+  .bg-photo {
+    inset: 0;
+  }
+  .bg-image {
+    background-size: contain;
+    animation: none; /* ไม่ซูม จะได้เห็นรูปครบจริง */
+  }
 }
 
 /* ฟิลเตอร์มืด: ปรับตัวเลข 0.45 / 0.72 เพื่อให้รูปสว่างหรือมืดขึ้น */
 .bg-shade {
-  position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(14, 9, 5, 0.45), rgba(14, 9, 5, 0.72));
 }
 
+/* ลำแสงจากหน้าต่างด้านบน แกว่งช้าๆ */
+.bg-rays {
+  top: -20%;
+  left: -10%;
+  width: 90%;
+  height: 140%;
+  background: repeating-linear-gradient(
+    105deg,
+    transparent 0 7%,
+    rgba(255, 214, 150, 0.07) 9%,
+    transparent 13% 19%,
+    rgba(255, 214, 150, 0.045) 21%,
+    transparent 24% 30%
+  );
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
+  mix-blend-mode: screen;
+  transform-origin: 30% 0;
+  animation: rays-sway 18s ease-in-out infinite alternate;
+}
+@keyframes rays-sway {
+  from {
+    transform: rotate(-2deg);
+    opacity: 0.65;
+  }
+  to {
+    transform: rotate(2.5deg);
+    opacity: 1;
+  }
+}
+
+/* แสงคบเพลิงสองข้าง กะพริบไม่สม่ำเสมอเหมือนเปลวไฟจริง */
+.bg-torch {
+  top: 10%;
+  width: 46vmax;
+  height: 46vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 150, 60, 0.32), rgba(255, 110, 30, 0.12) 38%, transparent 68%);
+  mix-blend-mode: screen;
+  animation: torch-flicker 3.4s steps(1, end) infinite, torch-breathe 7s ease-in-out infinite alternate;
+}
+.bg-torch.left {
+  left: -22vmax;
+}
+.bg-torch.right {
+  right: -22vmax;
+  animation-delay: -1.3s, -3s;
+  animation-duration: 2.9s, 8.5s;
+}
+@keyframes torch-flicker {
+  0% { opacity: 0.85; }
+  11% { opacity: 0.7; }
+  19% { opacity: 0.95; }
+  33% { opacity: 0.78; }
+  41% { opacity: 1; }
+  57% { opacity: 0.74; }
+  68% { opacity: 0.9; }
+  80% { opacity: 0.8; }
+  91% { opacity: 0.97; }
+}
+@keyframes torch-breathe {
+  from {
+    transform: scale(0.94);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+/* หมอกบางๆ เลื่อนช้าๆ ด้านล่าง */
+.bg-fog {
+  left: -50%;
+  bottom: -8%;
+  width: 200%;
+  height: 38%;
+  background:
+    radial-gradient(ellipse 22% 55% at 18% 70%, rgba(210, 190, 160, 0.13), transparent 70%),
+    radial-gradient(ellipse 26% 50% at 47% 78%, rgba(210, 190, 160, 0.1), transparent 70%),
+    radial-gradient(ellipse 20% 60% at 72% 68%, rgba(210, 190, 160, 0.12), transparent 70%),
+    radial-gradient(ellipse 24% 50% at 93% 76%, rgba(210, 190, 160, 0.1), transparent 70%);
+  filter: blur(8px);
+  animation: fog-drift 70s linear infinite;
+}
+@keyframes fog-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(25%);
+  }
+}
+
+/* ฝุ่นลอยในลำแสง */
+.dust {
+  border-radius: 50%;
+  background: rgba(255, 236, 200, 0.85);
+  box-shadow: 0 0 4px rgba(255, 230, 180, 0.7);
+  opacity: 0;
+  animation-name: dust-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes dust-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  25% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(14px, -18px);
+  }
+  75% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-6px, -34px);
+  }
+}
+
 /* ประกายไฟลอยขึ้น */
 .mote {
-  position: absolute;
   bottom: -12px;
   border-radius: 50%;
   background: #ffb347;
@@ -52,14 +213,24 @@
 
 /* ขอบจอมืดลง ให้สายตาโฟกัสตรงกลาง */
 .bg-vignette {
-  position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6));
 }
 
-/* คนที่ตั้งค่าลดการเคลื่อนไหวในระบบ จะได้พื้นหลังนิ่ง */
+/* คนที่ตั้งค่าลดการเคลื่อนไหวในระบบ จะได้พื้นหลังนิ่ง (ยังมีแสงคบเพลิงแต่ไม่กะพริบ) */
 @media (prefers-reduced-motion: reduce) {
-  .mote {
+  .mote,
+  .dust,
+  .bg-fog {
     display: none;
+  }
+  .bg-image,
+  .bg-rays,
+  .bg-torch {
+    animation: none;
+  }
+  .bg-layer {
+    transform: none;
+    transition: none;
   }
 }

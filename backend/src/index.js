@@ -2,8 +2,8 @@
 import { randomUUID } from 'node:crypto';
 import express from 'express';
 import cors from 'cors';
-import { setup, getPortfolio, ensureConversation, saveMessages, getMessages } from './db.js';
-import { askAI, AIError } from './ai.js';
+import { setup, getPortfolio, getMember, ensureConversation, saveMessages, getMessages } from './db.js';
+import { askAI, askBuildAdvisor, AIError, BUILD_GOALS, STAT_KEYS } from './ai.js';
 
 const app = express();
 app.set('trust proxy', 1); // บน Render มี proxy คั่นอยู่ ต้องเชื่อ IP จริงของผู้ใช้
@@ -90,18 +90,92 @@ app.post('/api/chat', rateLimit, async (req, res) => {
 
     res.json({ conversationId, reply });
   } catch (err) {
-    console.error(err);
-    if (err instanceof AIError) {
-      const status = err.code === 'NO_KEY' ? 503 : 502;
-      const text =
-        err.code === 'NO_KEY'
-          ? 'ระบบ AI ยังไม่ได้ตั้งค่า'
-          : err.code === 'TIMEOUT'
-            ? 'AI ตอบช้าเกินไป ลองใหม่อีกครั้งนะ'
-            : 'ติดต่อ AI ไม่สำเร็จ ลองใหม่อีกครั้งนะ';
-      return res.status(status).json({ error: text });
+    aiErrorResponse(res, err);
+  }
+});
+
+// ---------- ที่ปรึกษา build (บอร์ดเควสต์ในหน้ารายละเอียดสมาชิก) ----------
+// ค่าเหล่านี้ต้องตรงกับฝั่งหน้าเว็บ: FREE_POINTS ใน MemberScreen.jsx, STAT_MIN/STAT_MAX ใน rules.js
+const FREE_POINTS = 4;
+const STAT_MIN = 3;
+const STAT_MAX = 20;
+const MAX_BUILD_HISTORY = 12; // ส่งประวัติให้ AI ไม่เกินกี่ข้อความ
+const MAX_REPLY_LENGTH = 4000; // ข้อความของ AI ที่หน้าเว็บส่งกลับมาเป็นประวัติ
+
+const baseStat = (stats, k) => (Number.isFinite(Number(stats?.[k])) ? Number(stats[k]) : 10);
+
+function aiErrorResponse(res, err) {
+  console.error(err);
+  if (err instanceof AIError) {
+    const status = err.code === 'NO_KEY' ? 503 : 502;
+    const text =
+      err.code === 'NO_KEY'
+        ? 'ระบบ AI ยังไม่ได้ตั้งค่า'
+        : err.code === 'TIMEOUT'
+          ? 'AI ตอบช้าเกินไป ลองใหม่อีกครั้งนะ'
+          : 'ติดต่อ AI ไม่สำเร็จ ลองใหม่อีกครั้งนะ';
+    return res.status(status).json({ error: text });
+  }
+  res.status(500).json({ error: 'เกิดข้อผิดพลาดบนเซิร์ฟเวอร์' });
+}
+
+// รับ: { memberId, goal, stats: { STR, ... }, messages: [{ role, content }], lang }
+// ส่งกลับ: { reply, allocation }  (allocation = null ถ้าไม่ได้แนะนำให้ย้ายแต้ม)
+app.post('/api/build-chat', rateLimit, async (req, res) => {
+  const { memberId, goal, stats, messages, lang } = req.body ?? {};
+
+  // 1) ตรวจข้อมูลที่รับมา
+  if (!Number.isInteger(memberId) || !Object.hasOwn(BUILD_GOALS, goal ?? '')) {
+    return res.status(400).json({ error: 'ข้อมูลเควสต์ไม่ถูกต้อง' });
+  }
+  if (!Array.isArray(messages) || messages.length === 0 || messages.length > MAX_BUILD_HISTORY) {
+    return res.status(400).json({ error: 'ประวัติการสนทนาไม่ถูกต้อง' });
+  }
+  const validMessage = (m, i) =>
+    m &&
+    (m.role === 'user' || m.role === 'assistant') &&
+    typeof m.content === 'string' &&
+    m.content.trim() &&
+    m.content.length <= (m.role === 'user' ? MAX_MESSAGE_LENGTH : MAX_REPLY_LENGTH) &&
+    (i < messages.length - 1 || m.role === 'user'); // ข้อความสุดท้ายต้องเป็นคำถามของผู้ใช้
+  if (!messages.every(validMessage)) {
+    return res.status(400).json({ error: `ข้อความยาวเกิน ${MAX_MESSAGE_LENGTH} ตัวอักษร หรือรูปแบบไม่ถูกต้อง` });
+  }
+
+  try {
+    const member = await getMember(memberId);
+    if (!member) return res.status(404).json({ error: 'ไม่พบตัวละครนี้' });
+
+    // 2) ค่าปัจจุบันในตาราง ต้องอยู่ในช่วง และใช้แต้มไม่เกินที่มี
+    const base = Object.fromEntries(STAT_KEYS.map((k) => [k, baseStat(member.stats, k)]));
+    const current = {};
+    for (const k of STAT_KEYS) {
+      const v = stats?.[k];
+      if (!Number.isInteger(v) || v < STAT_MIN || v > STAT_MAX) {
+        return res.status(400).json({ error: 'ค่าสถานะไม่ถูกต้อง' });
+      }
+      current[k] = v;
     }
-    res.status(500).json({ error: 'เกิดข้อผิดพลาดบนเซิร์ฟเวอร์' });
+    const spent = STAT_KEYS.reduce((sum, k) => sum + (current[k] - base[k]), 0);
+    if (spent > FREE_POINTS) return res.status(400).json({ error: 'ใช้แต้มเกินที่กำหนด' });
+
+    // 3) ถาม AI
+    const result = await askBuildAdvisor(
+      {
+        member,
+        goal,
+        base,
+        current,
+        pointsLeft: FREE_POINTS - spent,
+        statMin: STAT_MIN,
+        statMax: STAT_MAX,
+        lang: lang === 'en' ? 'en' : 'th',
+      },
+      messages.map((m) => ({ role: m.role, content: m.content.trim() }))
+    );
+    res.json(result);
+  } catch (err) {
+    aiErrorResponse(res, err);
   }
 });
 

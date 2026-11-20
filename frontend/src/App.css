@@ -192,40 +192,6 @@ blockquote {
   padding-bottom: 0.2rem;
 }
 
-/* ---------- แถบค่าสถานะ ---------- */
-.stat {
-  display: grid;
-  grid-template-columns: 42px 1fr 70px;
-  align-items: center;
-  gap: 0.6rem;
-  margin: 0.3rem 0;
-  font-size: 0.9rem;
-}
-.stat-label {
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-}
-.stat-track {
-  height: 10px;
-  border-radius: 6px;
-  background: rgba(58, 38, 22, 0.25);
-  overflow: hidden;
-}
-.stat-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--crimson), var(--gold));
-  border-radius: 6px;
-}
-.stat-value {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-.stat-value em {
-  color: var(--ink-soft);
-  font-style: normal;
-  font-size: 0.8rem;
-}
-
 /* ---------- แท็ก / ผลงาน ---------- */
 .tags {
   display: flex;
@@ -239,18 +205,6 @@ blockquote {
   border-radius: 6px;
   padding: 0.15rem 0.6rem;
   font-size: 0.82rem;
-}
-.projects ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.projects li {
-  margin-bottom: 0.9rem;
-}
-.projects p {
-  margin: 0.2rem 0 0.4rem;
-  line-height: 1.55;
 }
 .card-foot {
   margin-top: 1rem;
@@ -270,10 +224,37 @@ blockquote {
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden; /* ให้แสงวาบอยู่ในปุ่ม */
+}
+/* แสงวาบเหมือนทองสะท้อนไฟ ตอนชี้เมาส์ */
+.btn-gold::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
 }
 .btn-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4), 0 0 16px rgba(230, 195, 106, 0.35);
+}
+.btn-gold:hover::after {
+  animation: gold-shine 0.75s ease-out;
+}
+@keyframes gold-shine {
+  to {
+    left: 120%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-gold:hover::after {
+    animation: none;
+  }
 }
 .btn-gold:focus-visible {
   outline: 3px solid #fff;

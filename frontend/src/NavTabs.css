@@ -1,0 +1,84 @@
+/* ---------- แถบแท็บด้านบนทุกหน้า (แบบที่คั่นหนังสือ) ---------- */
+/* ด้านขวาเว้นที่ไว้ให้ปุ่มสลับภาษา (.lang-switch ลอยอยู่มุมขวาบน) */
+:root {
+  --nav-h: 3.4rem;
+}
+.nav-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 0 8.5rem 0 1.25rem;
+  background: linear-gradient(180deg, rgba(43, 29, 20, 0.97), rgba(26, 17, 12, 0.97));
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+}
+.nav-brand {
+  align-self: center;
+  flex: none;
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-weight: 700;
+  color: var(--gold-bright);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-tab-list {
+  display: flex;
+  gap: 0.3rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tab-list::-webkit-scrollbar {
+  display: none;
+}
+.nav-tab {
+  flex: none;
+  padding: 0.55rem 1.1rem 0.5rem;
+  border-radius: 9px 9px 0 0;
+  background: var(--wood-mid, #3a281b);
+  color: #cdbb92;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-tab:hover {
+  color: var(--gold-bright);
+}
+.nav-tab[aria-current='page'] {
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  color: var(--wood-dark);
+}
+.nav-tab:focus-visible,
+.nav-brand:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* หน้าแรกเต็มจอ: หักความสูงของแถบแท็บออก จะได้ไม่ต้องเลื่อน */
+.start {
+  min-height: calc(100vh - var(--nav-h));
+}
+
+@media (max-width: 700px) {
+  .nav-tabs {
+    padding: 0 7rem 0 0.75rem;
+    gap: 0.5rem;
+  }
+  .nav-brand {
+    display: none;
+  }
+  .nav-tab {
+    padding: 0.5rem 0.75rem 0.45rem;
+    font-size: 0.9rem;
+  }
+  /* แถบแท็บกันที่ให้ปุ่มภาษาแล้ว ไม่ต้องเว้นหัวหน้าเพิ่ม */
+  .page {
+    padding-top: 1.5rem;
+  }
+}

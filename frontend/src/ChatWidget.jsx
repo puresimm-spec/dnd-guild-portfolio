@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import './Chat.css'
+import { useLang } from './i18n.js'
 
 const STORAGE_KEY = 'guild-conversation-id'
 const MAX_LENGTH = 1000 // ต้องตรงกับ MAX_MESSAGE_LENGTH ใน backend
-const SUGGESTIONS = ['ในปาร์ตี้มีใครบ้าง', 'ใครเก่งเรื่อง AI', 'ขอดูผลงานของทีมหน่อย']
 
 // localStorage อาจใช้ไม่ได้ในบางโหมด จึงครอบ try/catch
 const loadId = () => {
@@ -23,6 +23,7 @@ const saveId = (id) => {
 }
 
 export default function ChatWidget() {
+  const { t, lang } = useLang()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([]) // [{ role: 'user' | 'assistant', content }]
   const [conversationId, setConversationId] = useState(loadId)
@@ -56,6 +57,12 @@ export default function ChatWidget() {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, sending, open])
 
+  // ข้อความ error: ภาษาไทยใช้ข้อความจาก backend ภาษาอังกฤษแปลตามรหัสสถานะ
+  function errorText(status, serverMessage) {
+    if (lang === 'th') return serverMessage || t('chat_err_generic')
+    return t(`chat_err_${status}`) === `chat_err_${status}` ? t('chat_err_generic') : t(`chat_err_${status}`)
+  }
+
   async function send(text) {
     const message = text.trim()
     if (!message || sending) return
@@ -70,12 +77,12 @@ export default function ChatWidget() {
         body: JSON.stringify({ message, ...(conversationId ? { conversationId } : {}) }),
       })
       const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data.error || 'เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะ')
+      if (!res.ok) throw new Error(errorText(res.status, data.error))
       setConversationId(data.conversationId)
       saveId(data.conversationId)
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }])
     } catch (err) {
-      setError(err.message)
+      setError(err instanceof TypeError ? t('chat_err_generic') : err.message)
     } finally {
       setSending(false)
     }
@@ -99,20 +106,20 @@ export default function ChatWidget() {
   return (
     <>
       {!open && (
-        <button className="chat-fab" onClick={() => setOpen(true)} aria-label="เปิดแชตกับ Guild Keeper">
-          🗨 ถาม Guild Keeper
+        <button className="chat-fab" onClick={() => setOpen(true)} aria-label={t('chat_open')}>
+          {t('chat_fab')}
         </button>
       )}
 
       {open && (
-        <section className="chat-panel" aria-label="แชตกับ Guild Keeper">
+        <section className="chat-panel" aria-label={t('chat_open')}>
           <header className="chat-head">
             <strong>Guild Keeper</strong>
             <div>
-              <button onClick={newChat} title="เริ่มคุยใหม่">
+              <button onClick={newChat} title={t('chat_new')} aria-label={t('chat_new')}>
                 ↻
               </button>
-              <button onClick={() => setOpen(false)} aria-label="ปิดแชต">
+              <button onClick={() => setOpen(false)} aria-label={t('chat_close')}>
                 ✕
               </button>
             </div>
@@ -121,9 +128,9 @@ export default function ChatWidget() {
           <div className="chat-body">
             {messages.length === 0 && (
               <div className="chat-empty">
-                <p>ข้าคือผู้ดูแลห้องโถงกิลด์ ถามเรื่องปาร์ตี้และสมาชิกได้เลย</p>
+                <p>{t('chat_intro')}</p>
                 <div className="chat-suggestions">
-                  {SUGGESTIONS.map((s) => (
+                  {t('chat_suggestions').map((s) => (
                     <button key={s} onClick={() => send(s)} disabled={sending}>
                       {s}
                     </button>
@@ -138,7 +145,7 @@ export default function ChatWidget() {
               </div>
             ))}
 
-            {sending && <div className="bubble assistant typing">กำลังร่ายคาถา…</div>}
+            {sending && <div className="bubble assistant typing">{t('chat_typing')}</div>}
             {error && <div className="chat-error">{error}</div>}
             <div ref={endRef} />
           </div>
@@ -154,13 +161,13 @@ export default function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              placeholder="พิมพ์คำถาม…"
+              placeholder={t('chat_placeholder')}
               maxLength={MAX_LENGTH}
               rows={1}
               disabled={sending}
             />
             <button type="submit" disabled={sending || !input.trim()}>
-              ส่ง
+              {t('chat_send')}
             </button>
           </form>
         </section>

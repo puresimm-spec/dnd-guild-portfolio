@@ -1,13 +1,11 @@
-import { Avatar, GithubButton, ProjectList } from './shared.jsx'
+import { Avatar, GithubButton } from './shared.jsx'
+import { useLang } from './i18n.js'
 
 // หน้าปาร์ตี้: ภาพรวมของกลุ่ม + ไทล์สมาชิกทุกคน (กดเข้าไปดูรายละเอียดรายคน)
 export default function PartyScreen({ group, members }) {
+  const { t } = useLang()
   return (
     <main className="page">
-      <nav className="topbar">
-        <a href="#/">← หน้าแรก</a>
-      </nav>
-
       <section className="hero compact">
         <p className="eyebrow">⚜ Adventurers’ Guild ⚜</p>
         <h1>{group.name}</h1>
@@ -22,37 +20,28 @@ export default function PartyScreen({ group, members }) {
           </ul>
         )}
 
-        <GithubButton href={group.contact?.github}>GitHub ของปาร์ตี้</GithubButton>
+        <GithubButton href={group.contact?.github}>{t('github_party')}</GithubButton>
       </section>
 
       <section>
-        <h2 className="section-title">สมาชิกปาร์ตี้</h2>
+        <h2 className="section-title">{t('members_title')}</h2>
         <div className="tiles">
           {members.map((m, i) => (
             <a className="tile" key={m.id} href={`#/member/${i + 1}`}>
-              <Avatar member={m} size="lg" />
+              <Avatar member={m} size="lg" variant={i} />
               <h3>{m.name}</h3>
               {m.nickname && <p className="nickname">{m.nickname}</p>}
               <p className="class-line">
-                {m.dnd_class} · เลเวล {m.level}
+                {m.dnd_class} · {t('level', m.level)}
               </p>
               {m.role && <p className="role">⚔ {m.role}</p>}
-              <span className="tile-cta">ดูรายละเอียด →</span>
+              <span className="tile-cta">{t('view_details')}</span>
             </a>
           ))}
         </div>
       </section>
 
-      {group.projects?.length > 0 && (
-        <section className="group-projects">
-          <h2 className="section-title">ผลงานของทั้งปาร์ตี้</h2>
-          <div className="card wide">
-            <ProjectList projects={group.projects} title="" />
-          </div>
-        </section>
-      )}
-
-      <footer className="page-foot">ค่าสถานะ STR/DEX/INT ฯลฯ เป็นของเล่นในธีมเกม ไม่ใช่การประเมินความสามารถจริง</footer>
+      <footer className="page-foot">{t('stats_note')}</footer>
     </main>
   )
 }

@@ -1,0 +1,242 @@
+/* ---------- หน้า Presentation: สไลด์ 16:9 บนกระดาษ ---------- */
+.page.present {
+  max-width: 1100px;
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.slide {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  max-height: calc(100vh - var(--nav-h, 3.4rem) - 8rem);
+  margin: 0 auto;
+  width: 100%;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(255, 255, 255, 0.35), transparent 60%),
+    var(--parchment);
+  color: var(--ink);
+  border: 2px solid var(--parchment-edge);
+  border-radius: 14px;
+  box-shadow: 0 0 0 4px var(--wood-dark), 0 0 0 5px var(--gold), 0 18px 40px rgba(0, 0, 0, 0.5);
+  padding: clamp(1.2rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.6rem, 1.6vw, 1.1rem);
+  text-align: center;
+  overflow: auto;
+  animation: slide-in 0.3s ease-out;
+}
+@keyframes slide-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide {
+    animation: none;
+  }
+}
+.slide-eyebrow {
+  margin: 0;
+  font: 700 0.8rem 'Cinzel', 'Sarabun', serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+.slide-title {
+  margin: 0;
+  font-family: 'Cinzel', 'Sarabun', serif;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.slide-lead {
+  margin: 0;
+  max-width: 56ch;
+  font-size: clamp(0.95rem, 1.7vw, 1.15rem);
+  line-height: 1.65;
+}
+.slide-sub {
+  margin: 0;
+  color: var(--ink-soft);
+}
+.slide-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+.slide-box {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--parchment-edge);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.slide-box b {
+  display: block;
+  font-family: 'Cinzel', 'Sarabun', serif;
+  color: var(--crimson);
+  margin-bottom: 0.15rem;
+}
+.slide-flow {
+  margin: 0;
+}
+.slide-metric {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+.slide-metric .before {
+  font: 700 clamp(1.1rem, 2.4vw, 1.6rem) 'Cinzel', 'Sarabun', serif;
+  color: #9a8a70;
+  text-decoration: line-through;
+}
+.slide-metric .arrow {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.slide-metric .after {
+  font: 700 clamp(1.6rem, 3.6vw, 2.4rem) 'Cinzel', 'Sarabun', serif;
+  color: #2f7d32;
+}
+.slide-metric small {
+  flex-basis: 100%;
+  color: var(--ink-soft);
+}
+.slide-team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+.slide-dev {
+  --class-color: var(--gold);
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.9rem 0.6rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--parchment-edge);
+  border-top: 5px solid var(--class-color);
+  border-radius: 10px;
+}
+.slide-dev[data-class='monk'] {
+  --class-color: #c8691c;
+}
+.slide-dev[data-class='warrior'] {
+  --class-color: #6b3fa0;
+}
+.slide-dev[data-class='ranger'] {
+  --class-color: #2f6b3a;
+}
+.slide-dev .avatar {
+  margin-bottom: 0.35rem;
+}
+.slide-dev b {
+  font-family: 'Cinzel', 'Sarabun', serif;
+}
+.slide-dev span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.slide-dev small {
+  color: var(--class-color);
+  font-weight: 700;
+}
+.slide-demo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.btn-outline {
+  display: inline-block;
+  padding: 0.45rem 1.1rem;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.btn-outline:hover {
+  background: rgba(201, 162, 75, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ปุ่มควบคุมใต้สไลด์ */
+.slide-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+}
+.slide-arrow {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--wood);
+  color: var(--gold-bright);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.slide-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.slide-dots {
+  display: flex;
+  gap: 0.45rem;
+}
+.slide-dots button {
+  width: 0.7rem;
+  height: 0.7rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #5a4632;
+  cursor: pointer;
+  transition: width 0.2s ease, background 0.2s ease;
+}
+.slide-dots button[aria-current='true'] {
+  width: 1.6rem;
+  background: var(--gold-bright);
+}
+.slide-arrow:focus-visible,
+.slide-dots button:focus-visible,
+.btn-outline:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.slide-hint {
+  margin: 0;
+  text-align: center;
+  color: #cdbb92;
+  font-size: 0.85rem;
+}
+
+/* จอแคบ: เลิกบังคับ 16:9 ให้เนื้อหายาวลงได้ */
+@media (max-width: 760px) {
+  .slide {
+    aspect-ratio: auto;
+    max-height: none;
+    min-height: 60vh;
+  }
+}
