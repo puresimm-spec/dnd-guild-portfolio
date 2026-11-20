@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { go } from './useRoute.js'
-import { useLang } from './i18n.js'
+import { localized, useLang } from './i18n.js'
 
 // หน้าแรก: ชื่อกิลด์ + ปุ่มเข้าสู่ห้องโถง
 // ระหว่างที่รอ backend (แพ็กเกจฟรีอาจต้องปลุกก่อน) จะแสดงข้อความรอ แล้วค่อยโชว์ปุ่ม
 export default function StartScreen({ group, error, onRetry }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const tagline = localized(group, lang, 'tagline')
   const enterRef = useRef(null)
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function StartScreen({ group, error, onRetry }) {
         {!error && group && (
           <>
             <h1>{group.name}</h1>
-            {group.tagline && <p className="start-sub">{group.tagline}</p>}
+            {tagline && <p className="start-sub">{tagline}</p>}
             <button ref={enterRef} className="btn-gold btn-enter" onClick={() => go('/party')}>
               {t('enter')}
             </button>

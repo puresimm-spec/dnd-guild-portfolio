@@ -36,12 +36,14 @@ export async function setup() {
 
     const g = seed.group;
     // $1, $2, ... คือ placeholder: ส่งค่าแยกจากคำสั่ง SQL เพื่อกัน SQL injection
+    // en = ข้อความภาษาอังกฤษ (ไม่มีก็เป็น {} หน้าเว็บจะใช้ภาษาไทยแทน)
+    const en = (obj) => JSON.stringify(obj?.en ?? {});
     await client.query(
-      `INSERT INTO group_info (id, name, tagline, concept, highlights, contact)
-       VALUES (1, $1, $2, $3, $4, $5)
+      `INSERT INTO group_info (id, name, tagline, concept, highlights, contact, en)
+       VALUES (1, $1, $2, $3, $4, $5, $6)
        ON CONFLICT (id) DO UPDATE
-       SET name = $1, tagline = $2, concept = $3, highlights = $4, contact = $5`,
-      [g.name, g.tagline, g.concept, g.highlights, JSON.stringify(g.contact)]
+       SET name = $1, tagline = $2, concept = $3, highlights = $4, contact = $5, en = $6`,
+      [g.name, g.tagline, g.concept, g.highlights, JSON.stringify(g.contact), en(g)]
     );
 
     // ล้างของเก่าก่อนใส่ใหม่ (projects ก่อน เพราะอ้างอิง members อยู่)
@@ -50,9 +52,9 @@ export async function setup() {
 
     const addProject = (memberId, p) =>
       client.query(
-        `INSERT INTO projects (member_id, title, description, tech, github_url)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [memberId, p.title, p.description, p.tech ?? [], p.github_url ?? null]
+        `INSERT INTO projects (member_id, title, description, tech, github_url, en)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [memberId, p.title, p.description, p.tech ?? [], p.github_url ?? null, en(p)]
       );
 
     // ผลงานของทั้งกลุ่ม (member_id = null)
@@ -62,13 +64,13 @@ export async function setup() {
     for (const [index, m] of seed.members.entries()) {
       const { rows } = await client.query(
         `INSERT INTO members
-           (name, nickname, dnd_class, level, role, bio, quote, skills, stats, github_url, photo, sort)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+           (name, nickname, dnd_class, level, role, bio, quote, skills, stats, github_url, photo, sort, en)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
          RETURNING id`,                       // ขอ id ที่เพิ่งสร้างกลับมาใช้ผูกกับ projects
-        [m.name, m.nickname, m.dnd_class, m.level, m.role, m.bio, m.quote,
-         m.skills, JSON.stringify(m.stats), m.github_url, m.photo, index]
+        [m.name, m.nickname ?? null, m.dnd_class, m.level, m.role, m.bio, m.quote,
+         m.skills, JSON.stringify(m.stats), m.github_url ?? null, m.photo ?? null, index, en(m)]
       );
-      for (const p of m.projects) await addProject(rows[0].id, p);
+      for (const p of m.projects ?? []) await addProject(rows[0].id, p);
     }
 
     await client.query('COMMIT');

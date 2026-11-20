@@ -11,7 +11,7 @@ export const REPO_URL = 'https://github.com/puresimm-spec/dnd-guild-portfolio'
 export const DEVELOPERS = [
   {
     name: 'Puree Simma',
-    nickname: 'พอล (Paul)',
+    nickname: { th: 'พอล (Paul)', en: 'Paul' },
     dndClass: 'Monk',
     variant: 0,
     portrait: 'paul', // ภาพครึ่งตัวใน portraits.js (Monk ใส่เชิ้ตขาว เนคไทเทา)
@@ -25,7 +25,7 @@ export const DEVELOPERS = [
   },
   {
     name: 'Yanakorn Yodudom',
-    nickname: 'เซนส์ (Sense)',
+    nickname: { th: 'เซนส์ (Sense)', en: 'Sense' },
     dndClass: 'Warrior',
     variant: 1,
     portrait: 'sense', // ภาพครึ่งตัวใน portraits.js (Purple Dragon Knight)
@@ -39,7 +39,7 @@ export const DEVELOPERS = [
   },
   {
     name: 'Nattavut Wongjeen',
-    nickname: 'แม็ค (Max)',
+    nickname: { th: 'แม็ค (Max)', en: 'Max' },
     dndClass: 'Ranger',
     variant: 2,
     portrait: 'max', // ภาพครึ่งตัวใน portraits.js (Ranger ผ้าพันคอปิดหน้า)

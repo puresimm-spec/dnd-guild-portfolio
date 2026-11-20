@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS members (
   nickname   TEXT,
   dnd_class  TEXT NOT NULL,            -- คลาส เช่น Artificer
   level      INT  NOT NULL DEFAULT 1,
-  role       TEXT,                     -- บทบาทจริงในทีม
+  role       TEXT,                     -- สาย build ของตัวละคร เช่น ถึกทน (Tank)
   bio        TEXT,
   quote      TEXT,                     -- คำคมประจำตัวละคร
   skills     TEXT[] NOT NULL DEFAULT '{}',
@@ -51,3 +51,10 @@ CREATE TABLE IF NOT EXISTS messages (
   created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id, id);
+
+-- ข้อความภาษาอังกฤษของข้อมูลที่แสดงบนเว็บ (ค่าหลักในแต่ละช่องเป็นภาษาไทย)
+-- เช่น members.en = {"role": "...", "bio": "...", "quote": "..."}
+-- ใช้ ADD COLUMN IF NOT EXISTS เพื่อเพิ่มให้ฐานข้อมูลเดิมที่สร้างไว้แล้ว โดยไม่ต้องลบทิ้ง
+ALTER TABLE group_info ADD COLUMN IF NOT EXISTS en JSONB NOT NULL DEFAULT '{}';
+ALTER TABLE members    ADD COLUMN IF NOT EXISTS en JSONB NOT NULL DEFAULT '{}';
+ALTER TABLE projects   ADD COLUMN IF NOT EXISTS en JSONB NOT NULL DEFAULT '{}';

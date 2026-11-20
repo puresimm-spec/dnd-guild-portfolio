@@ -1,5 +1,5 @@
 import { Avatar, GithubButton } from './shared.jsx'
-import { useLang } from './i18n.js'
+import { localized, useLang } from './i18n.js'
 import { DEVELOPERS, REPO_URL, TECH_STACK } from './developer.js'
 
 // หน้าข้อมูลผู้พัฒนาเว็บไซต์ (ข้อมูลมาจาก developer.js ไม่ต้องรอ backend)
@@ -32,7 +32,7 @@ export default function DeveloperScreen({ projects }) {
                 </div>
                 <span className="dev-class">{d.dndClass}</span>
                 <h3>{d.name}</h3>
-                <p className="nickname">{d.nickname}</p>
+                <p className="nickname">{pick(d.nickname)}</p>
                 <p className="dev-role">{pick(d.role)}</p>
               </header>
 
@@ -53,7 +53,7 @@ export default function DeveloperScreen({ projects }) {
 
               {d.github && (
                 <div className="dev-foot">
-                  <GithubButton href={d.github}>{t('github_of', d.nickname)}</GithubButton>
+                  <GithubButton href={d.github}>{t('github_of', pick(d.nickname))}</GithubButton>
                 </div>
               )}
             </article>
@@ -68,8 +68,8 @@ export default function DeveloperScreen({ projects }) {
             {projects.map((p) => (
               <article className="card dev-project" key={p.id ?? p.title}>
                 <p className="dev-project-eyebrow">{t('dev_projects_eyebrow')}</p>
-                <h3>{p.title}</h3>
-                <p className="dev-project-desc">{p.description}</p>
+                <h3>{localized(p, lang, 'title')}</h3>
+                <p className="dev-project-desc">{localized(p, lang, 'description')}</p>
                 {p.tech?.length > 0 && (
                   <div className="tags">
                     {p.tech.map((tech) => (

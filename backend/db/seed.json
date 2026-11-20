@@ -4,7 +4,7 @@
     "tagline": "ทุกคลาสมี build ที่ใช่ เราช่วยคุณหาให้เจอ",
     "concept": "เราคือกิลด์ที่ช่วยนักผจญภัยออกแบบ build ตัวละครของแต่ละคลาส ให้เดินไปตามสายที่ผู้เล่นอยากเป็นได้อย่างเต็มศักยภาพ ไม่ว่าจะเป็นสายถึกทน สายโจมตี สายสนับสนุน หรือสายผสม เราช่วยให้ทุกการเลือกมีเหตุผลรองรับ",
     "highlights": [
-      "ครอบคลุมหลายคลาส แต่ละสมาชิกเชี่ยวชาญคนละคลาส",
+      "มีตัวละครตัวอย่างหลายคลาส ลองย้ายแต้มและวาง build ได้ทันที",
       "ออกแบบตามสายที่ต้องการ เริ่มจากเป้าหมายของผู้เล่น แล้วเลือกทักษะและอุปกรณ์ให้เข้ากับสาย",
       "อธิบายให้เข้าใจง่าย บอกว่าทำไมจึงเลือกแบบนี้"
     ],
@@ -15,20 +15,53 @@
       {
         "title": "Chat AI พร้อม Portfolio",
         "description": "เว็บแอปให้ผู้เยี่ยมชมคุยกับ AI เพื่อสอบถามผลงานและทักษะของทีม",
-        "tech": ["React", "Express", "PostgreSQL", "Gemini API"],
-        "github_url": "https://github.com/puresimm-spec/dnd-guild-portfolio"
+        "tech": [
+          "React",
+          "Express",
+          "PostgreSQL",
+          "Gemini API"
+        ],
+        "github_url": "https://github.com/puresimm-spec/dnd-guild-portfolio",
+        "en": {
+          "title": "Chat AI Portfolio",
+          "description": "A web app where visitors chat with an AI to learn about the team’s work and skills."
+        }
       }
-    ]
+    ],
+    "en": {
+      "tagline": "Every class has the right build. We help you find it.",
+      "concept": "We are a guild that helps adventurers design a character build for every class, so each character can follow the path its player wants at full potential. Tank, damage, support or hybrid, we make sure every choice has a reason behind it.",
+      "highlights": [
+        "Sample characters across many classes. Move their points and plan a build right away",
+        "Built around your goal: start from what the player wants, then pick skills and gear that fit the path",
+        "Clear explanations of why each choice was made"
+      ]
+    }
   },
   "website": {
     "_note": "ข้อมูลทีมผู้พัฒนาจริง ใช้ให้ Guild Keeper (AI) ตอบ ต้องแก้ให้ตรงกับ frontend/src/developer.js เสมอ",
     "about": "เว็บพอร์ตโฟลิโอธีม Dungeons & Dragons ของกิลด์ Buddy Build ผู้เยี่ยมชมดูการ์ดตัวละคร ลองปรับค่าสถานะ คุยกับ Guild Keeper (AI) และให้ AI ช่วยแนะนำ build ได้",
     "source_code": "https://github.com/puresimm-spec/dnd-guild-portfolio",
     "tech": {
-      "หน้าเว็บ (Frontend)": ["React", "Vite", "CSS", "SVG pixel art"],
-      "เซิร์ฟเวอร์ (Backend)": ["Node.js", "Express"],
-      "ข้อมูลและ AI": ["PostgreSQL", "Google Gemini API"],
-      "ขึ้นระบบ (Deployment)": ["Render", "GitHub", "Docker (ตอนพัฒนา)"]
+      "หน้าเว็บ (Frontend)": [
+        "React",
+        "Vite",
+        "CSS",
+        "SVG pixel art"
+      ],
+      "เซิร์ฟเวอร์ (Backend)": [
+        "Node.js",
+        "Express"
+      ],
+      "ข้อมูลและ AI": [
+        "PostgreSQL",
+        "Google Gemini API"
+      ],
+      "ขึ้นระบบ (Deployment)": [
+        "Render",
+        "GitHub",
+        "Docker (ตอนพัฒนา)"
+      ]
     },
     "developers": [
       {
@@ -37,7 +70,15 @@
         "dnd_class": "Monk",
         "role": "AI Engineer · นักพัฒนา",
         "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขาวิชาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ ใช้ Python ประมวลผลและวิเคราะห์ข้อมูล ตอนนี้กำลังศึกษา Git, การออกแบบฐานข้อมูล และ Docker สื่อสารได้ทั้งภาษาไทยและภาษาอังกฤษ",
-        "skills": ["Python", "Google Colab", "VS Code", "Excel", "GitLab", "dbdiagram.io", "Docker"],
+        "skills": [
+          "Python",
+          "Google Colab",
+          "VS Code",
+          "Excel",
+          "GitLab",
+          "dbdiagram.io",
+          "Docker"
+        ],
         "github_url": "https://github.com/puresimm-spec"
       },
       {
@@ -46,7 +87,15 @@
         "dnd_class": "Warrior",
         "role": "Aspiring AI/ML Engineer · นักพัฒนา",
         "bio": "นักศึกษาปริญญาตรีวิศวกรรมศาสตร์ สาขา AI and Data Science มหาวิทยาลัยกรุงเทพ (2024–ปัจจุบัน) สนใจ AI และ Machine Learning อยากรู้ว่าโมเดลทำงานอย่างไร มีพื้นฐาน Python การทำความสะอาดข้อมูล และฐานข้อมูล เคยสร้างโมเดลจริงในโปรเจกต์ ใช้ภาษาอังกฤษได้ระดับ C2 และภาษาไทยเป็นภาษาแม่",
-        "skills": ["Python", "SQL", "MySQL", "PostgreSQL", "pandas", "scikit-learn", "ER Diagram"],
+        "skills": [
+          "Python",
+          "SQL",
+          "MySQL",
+          "PostgreSQL",
+          "pandas",
+          "scikit-learn",
+          "ER Diagram"
+        ],
         "github_url": null
       },
       {
@@ -55,7 +104,13 @@
         "dnd_class": "Ranger",
         "role": "AI & Data Science Student · นักพัฒนา",
         "bio": "นักศึกษาวิศวกรรมศาสตร์ สาขาวิชาวิศวกรรมปัญญาประดิษฐ์และวิทยาการข้อมูล มหาวิทยาลัยกรุงเทพ สนใจการนำข้อมูลและ AI มาช่วยแก้ปัญหาจริง กำลังฝึก Python และการออกแบบฐานข้อมูล ร่วมพัฒนาเว็บไซต์นี้",
-        "skills": ["Python", "Google Colab", "VS Code", "SQL", "PostgreSQL"],
+        "skills": [
+          "Python",
+          "Google Colab",
+          "VS Code",
+          "SQL",
+          "PostgreSQL"
+        ],
         "github_url": null
       }
     ]
@@ -63,87 +118,127 @@
   "members": [
     {
       "name": "Brannoc Ironvow",
-      "nickname": "แบรนน็อค",
+      "nickname": null,
       "dnd_class": "Paladin",
       "level": 9,
-      "role": "ที่ปรึกษา build สายถึกทน (Tank)",
-      "bio": "อัศวินผู้สาบานตนปกป้องแนวหน้า เชี่ยวชาญการวาง build ที่รับดาเมจได้มากที่สุดโดยไม่ทิ้งพลังโจมตี ชอบเริ่มจากคำถามว่า 'ทีมของเจ้าต้องการให้ใครยืนข้างหน้า'",
+      "role": "สาย build: ถึกทน (Tank)",
+      "bio": "อัศวินผู้สาบานตนปกป้องแนวหน้า ตัวละครตัวอย่างที่ผู้เล่นสร้างไว้สำหรับสายถึกทน ลองย้ายแต้มแล้วถาม Guild Keeper ว่าควรเลือก feat และอุปกรณ์อะไรให้ยืนแนวหน้าได้นานที่สุด",
       "quote": "โล่ที่ดีไม่ได้มีไว้กันตัวเอง แต่มีไว้กันเพื่อน",
-      "skills": ["Heavy Armor", "Shield Master", "Aura of Protection", "Party Positioning"],
-      "stats": { "STR": 17, "DEX": 9, "CON": 16, "INT": 10, "WIS": 12, "CHA": 15 },
+      "skills": [
+        "Heavy Armor",
+        "Shield Master",
+        "Aura of Protection",
+        "Party Positioning"
+      ],
+      "stats": {
+        "STR": 17,
+        "DEX": 9,
+        "CON": 16,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 15
+      },
       "github_url": null,
       "photo": null,
-      "projects": [
-        {
-          "title": "The Unbreakable Wall",
-          "description": "คู่มือ build Paladin สายป้องกัน ตั้งแต่เลเวล 1 ถึง 10 พร้อมเหตุผลการเลือก feat และอุปกรณ์แต่ละช่วง",
-          "tech": ["Paladin", "Tank Build"],
-          "github_url": null
-        }
-      ]
+      "projects": [],
+      "en": {
+        "role": "Build path: Tank",
+        "bio": "An oath-sworn knight who guards the front line. A sample character a player built for the Tank path: move the points around, then ask the Guild Keeper which feats and gear keep him standing longest.",
+        "quote": "A good shield is not for yourself. It is for your friends."
+      }
     },
     {
       "name": "Elowen Ashgrove",
-      "nickname": "เอโลเวน",
+      "nickname": null,
       "dnd_class": "Wizard",
       "level": 8,
-      "role": "ที่ปรึกษา build สายโจมตีเวท (Damage)",
-      "bio": "นักเวทจากหอสมุดเถ้าถ่าน คำนวณดาเมจต่อเทิร์นได้ก่อนศัตรูจะขยับ ช่วยผู้เล่นเลือกเวทที่คุ้มค่าที่สุดสำหรับทุกช่องสเปลล์",
+      "role": "สาย build: โจมตีเวท (Damage)",
+      "bio": "นักเวทจากหอสมุดเถ้าถ่าน ตัวละครตัวอย่างสายโจมตีเวท เหมาะกับการลองว่าควรเพิ่ม INT หรือ CON ก่อน และให้ AI ช่วยเลือกเวทที่คุ้มช่องสเปลล์ที่สุด",
       "quote": "เวทที่ร่ายถูกจังหวะ แรงกว่าเวทที่ร่ายแรงที่สุด",
-      "skills": ["Evocation", "Spell Slot Planning", "Area Control", "Damage Math"],
-      "stats": { "STR": 8, "DEX": 14, "CON": 13, "INT": 18, "WIS": 12, "CHA": 10 },
+      "skills": [
+        "Evocation",
+        "Spell Slot Planning",
+        "Area Control",
+        "Damage Math"
+      ],
+      "stats": {
+        "STR": 8,
+        "DEX": 14,
+        "CON": 13,
+        "INT": 18,
+        "WIS": 12,
+        "CHA": 10
+      },
       "github_url": null,
       "photo": null,
-      "projects": [
-        {
-          "title": "Fireball Economics",
-          "description": "ตารางเปรียบเทียบความคุ้มค่าของเวทโจมตีแต่ละระดับ ช่วยให้ Wizard มือใหม่จัดสรรช่องสเปลล์ได้ตลอดการผจญภัย",
-          "tech": ["Wizard", "Damage Build"],
-          "github_url": null
-        }
-      ]
+      "projects": [],
+      "en": {
+        "role": "Build path: Damage",
+        "bio": "A mage from the Ashen Library. A sample spell-damage character: try raising INT or CON first, and let the AI pick the spells that make the most of every slot.",
+        "quote": "A spell cast at the right moment hits harder than the strongest spell."
+      }
     },
     {
       "name": "Thessa Dawnmere",
-      "nickname": "เทสซา",
+      "nickname": null,
       "dnd_class": "Cleric",
       "level": 7,
-      "role": "ที่ปรึกษา build สายสนับสนุน (Support)",
-      "bio": "นักบวชแห่งรุ่งอรุณผู้เชื่อว่าปาร์ตี้ที่ไม่มีใครล้มคือปาร์ตี้ที่ชนะ ถนัดวาง build ฮีลและบัฟให้ทั้งทีมเล่นได้นานขึ้น",
+      "role": "สาย build: สนับสนุน (Support)",
+      "bio": "นักบวชแห่งรุ่งอรุณ ตัวละครตัวอย่างสายสนับสนุน ลองให้ AI ช่วยวางแผนฮีลและบัฟให้ทั้งปาร์ตี้อยู่รอดได้นานขึ้น",
       "quote": "ข้าไม่ได้ช่วยให้เจ้าชนะ ข้าช่วยให้เจ้าได้สู้ต่อ",
-      "skills": ["Healing", "Buff Timing", "Concentration Management", "Team Synergy"],
-      "stats": { "STR": 12, "DEX": 10, "CON": 14, "INT": 11, "WIS": 17, "CHA": 13 },
+      "skills": [
+        "Healing",
+        "Buff Timing",
+        "Concentration Management",
+        "Team Synergy"
+      ],
+      "stats": {
+        "STR": 12,
+        "DEX": 10,
+        "CON": 14,
+        "INT": 11,
+        "WIS": 17,
+        "CHA": 13
+      },
       "github_url": null,
       "photo": null,
-      "projects": [
-        {
-          "title": "Dawn Never Falls",
-          "description": "แนวทาง build Cleric สายสนับสนุนสำหรับปาร์ตี้ 4 คน เน้นการเลือกเวทฮีลและบัฟให้เข้ากับสมาชิกคนอื่น",
-          "tech": ["Cleric", "Support Build"],
-          "github_url": null
-        }
-      ]
+      "projects": [],
+      "en": {
+        "role": "Build path: Support",
+        "bio": "A cleric of the dawn. A sample support character: let the AI plan heals and buffs that keep the whole party alive longer.",
+        "quote": "I do not help you win. I help you keep fighting."
+      }
     },
     {
       "name": "Kestrel Vane",
-      "nickname": "เคสเทรล",
+      "nickname": null,
       "dnd_class": "Rogue",
       "level": 6,
-      "role": "ที่ปรึกษา build สายผสม (Hybrid)",
-      "bio": "นักย่องเงียบที่ไม่เคยเลือกเดินทางเดียว เชี่ยวชาญการผสมคลาส (multiclass) ให้ได้ทั้งความคล่องตัว ดาเมจ และทักษะนอกการต่อสู้",
+      "role": "สาย build: สายผสม (Hybrid)",
+      "bio": "นักย่องเงียบที่ไม่เคยเลือกเดินทางเดียว ตัวละครตัวอย่างสายผสม ลองถาม AI เรื่องการ multiclass ให้ได้ทั้งความคล่องตัว ดาเมจ และทักษะนอกการต่อสู้",
       "quote": "build ที่ดีที่สุด คือ build ที่ศัตรูเดาไม่ออก",
-      "skills": ["Multiclassing", "Sneak Attack", "Stealth", "Skill Expertise"],
-      "stats": { "STR": 10, "DEX": 18, "CON": 12, "INT": 14, "WIS": 11, "CHA": 13 },
+      "skills": [
+        "Multiclassing",
+        "Sneak Attack",
+        "Stealth",
+        "Skill Expertise"
+      ],
+      "stats": {
+        "STR": 10,
+        "DEX": 18,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 11,
+        "CHA": 13
+      },
       "github_url": null,
       "photo": null,
-      "projects": [
-        {
-          "title": "Two Paths, One Blade",
-          "description": "รวมสูตร multiclass ยอดนิยมของ Rogue พร้อมบอกจุดเด่น จุดอ่อน และเลเวลที่ควรสลับคลาส",
-          "tech": ["Rogue", "Hybrid Build"],
-          "github_url": null
-        }
-      ]
+      "projects": [],
+      "en": {
+        "role": "Build path: Hybrid",
+        "bio": "A silent prowler who never walks a single path. A sample hybrid character: ask the AI about multiclassing for agility, damage and skills outside combat.",
+        "quote": "The best build is the one your enemy cannot read."
+      }
     }
   ]
 }

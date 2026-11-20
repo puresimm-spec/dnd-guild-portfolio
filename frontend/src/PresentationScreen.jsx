@@ -78,7 +78,7 @@ function Slide({ id }) {
           {head}
           <p className="slide-lead">{pick(s.lead)}</p>
           <p className="slide-sub">
-            {DEVELOPERS.map((d) => d.nickname.split(' ')[0]).join(' · ')} — {pick(s.team)}
+            {DEVELOPERS.map((d) => pick(d.nickname).split(' ')[0]).join(' · ')} — {pick(s.team)}
           </p>
         </>
       )
@@ -142,7 +142,7 @@ function Slide({ id }) {
             {DEVELOPERS.map((d) => (
               <div className="slide-dev" key={d.name} data-class={d.dndClass.toLowerCase()}>
                 <Avatar member={{ name: d.name, dnd_class: d.dndClass, photo: null, portrait: d.portrait }} size="md" variant={d.variant} />
-                <b>{d.nickname}</b>
+                <b>{pick(d.nickname)}</b>
                 <span>{d.name}</span>
                 <small>{pick(d.role)}</small>
               </div>

@@ -270,3 +270,7 @@ export const LangContext = createContext({ lang: 'th', setLang: () => {}, t: (ke
 
 // ใช้ในคอมโพเนนต์: const { t, lang, setLang } = useLang()
 export const useLang = () => useContext(LangContext)
+
+// ข้อมูลจาก seed.json: ค่าหลักเป็นภาษาไทย ส่วนภาษาอังกฤษอยู่ใน obj.en (เช่น group.en.tagline)
+// localized(group, 'en', 'tagline') -> ใช้ของอังกฤษถ้ามี ไม่มีก็ใช้ค่าหลัก
+export const localized = (obj, lang, field) => (lang === 'en' && obj?.en?.[field] != null ? obj.en[field] : obj?.[field])

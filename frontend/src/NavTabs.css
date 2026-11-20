@@ -65,6 +65,19 @@
   min-height: calc(100vh - var(--nav-h));
 }
 
+/* เนื้อหาอยู่กลางจอทั้งแนวนอนและแนวตั้ง ไม่ว่าจะซูมหรือจอกว้างแค่ไหน
+   - แนวนอน: .page กว้างไม่เกิน 1100px และ margin auto อยู่แล้ว
+   - แนวตั้ง: หน้าที่เนื้อหาสั้นกว่าจอจะอยู่ตรงกลาง ถ้ายาวกว่าจอก็เลื่อนลงตามปกติ
+     ("safe center" กันไม่ให้หัวหน้าถูกตัดหายตอนเนื้อหายาวกว่าจอ) */
+.page:not(.center) {
+  min-height: calc(100vh - var(--nav-h));
+  min-height: calc(100dvh - var(--nav-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: safe center;
+}
+
 @media (max-width: 700px) {
   .nav-tabs {
     padding: 0 7rem 0 0.75rem;

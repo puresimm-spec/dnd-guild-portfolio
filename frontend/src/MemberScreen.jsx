@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Avatar, GithubButton, STAT_ORDER } from './shared.jsx'
-import { useLang } from './i18n.js'
+import { localized, useLang } from './i18n.js'
 import { STAT_MAX, STAT_MIN, abilityMod, deriveStats, scoreOf, signed } from './rules.js'
 import BuildQuestBoard from './BuildQuestBoard.jsx'
 
@@ -50,7 +50,10 @@ export default function MemberScreen({ members, index }) {
 }
 
 function Planner({ member, variant }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const role = localized(member, lang, 'role')
+  const bio = localized(member, lang, 'bio')
+  const quote = localized(member, lang, 'quote')
   const base = Object.fromEntries(STAT_ORDER.map((k) => [k, scoreOf(member.stats, k)]))
   const [current, setCurrent] = useState(base)
 
@@ -187,9 +190,8 @@ function Planner({ member, variant }) {
         {/* ---------- แผงขวา: ตัวตน + ทักษะ (ช่องอุปกรณ์) ---------- */}
         <section className="planner-panel" aria-label={t('about')}>
           <h1 className="planner-name">{member.name}</h1>
-          {member.nickname && <p className="nickname">{member.nickname}</p>}
-          {member.role && <p className="planner-role">{member.role}</p>}
-          {member.bio && <p className="bio planner-bio">{member.bio}</p>}
+          {role && <p className="planner-role">{role}</p>}
+          {bio && <p className="bio planner-bio">{bio}</p>}
 
           {member.skills?.length > 0 && (
             <>
@@ -203,9 +205,9 @@ function Planner({ member, variant }) {
             </>
           )}
 
-          {member.quote && (
+          {quote && (
             <div className="planner-effects">
-              <strong>{t('pl_quote')}</strong>“{member.quote}”
+              <strong>{t('pl_quote')}</strong>“{quote}”
             </div>
           )}
         </section>
