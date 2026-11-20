@@ -77,8 +77,9 @@
     transparent 24% 30%
   );
   mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 80%);
-  mix-blend-mode: screen;
+  /* ไม่ใช้ mix-blend-mode กับชั้นที่ขยับ: ทำให้เบราว์เซอร์ต้องวาดใหม่ทุกเฟรม (กระตุกในบางเครื่อง) */
   transform-origin: 30% 0;
+  will-change: transform, opacity;
   animation: rays-sway 18s ease-in-out infinite alternate;
 }
 @keyframes rays-sway {
@@ -92,41 +93,57 @@
   }
 }
 
-/* แสงคบเพลิงสองข้าง กะพริบไม่สม่ำเสมอเหมือนเปลวไฟจริง */
+/* แสงคบเพลิงสองข้าง: วูบวาบแบบค่อยๆ ไหล (ไม่กระโดดเป็นขั้น) ใช้แค่ opacity/transform ให้ลื่นบนการ์ดจอ
+   ความไม่สม่ำเสมอมาจากสองแอนิเมชันที่รอบยาวไม่เท่ากัน ซ้อนกัน จึงไม่ซ้ำจังหวะเดิมง่ายๆ */
 .bg-torch {
   top: 10%;
   width: 46vmax;
   height: 46vmax;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 150, 60, 0.32), rgba(255, 110, 30, 0.12) 38%, transparent 68%);
-  mix-blend-mode: screen;
-  animation: torch-flicker 3.4s steps(1, end) infinite, torch-breathe 7s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(255, 150, 60, 0.3), rgba(255, 110, 30, 0.11) 38%, transparent 68%);
+  will-change: opacity, transform;
+  animation:
+    torch-flicker 5.3s ease-in-out infinite,
+    torch-breathe 7s ease-in-out infinite alternate;
 }
 .bg-torch.left {
   left: -22vmax;
 }
 .bg-torch.right {
   right: -22vmax;
-  animation-delay: -1.3s, -3s;
-  animation-duration: 2.9s, 8.5s;
+  animation-delay: -2.1s, -3s;
+  animation-duration: 4.7s, 8.5s;
 }
 @keyframes torch-flicker {
-  0% { opacity: 0.85; }
-  11% { opacity: 0.7; }
-  19% { opacity: 0.95; }
-  33% { opacity: 0.78; }
-  41% { opacity: 1; }
-  57% { opacity: 0.74; }
-  68% { opacity: 0.9; }
-  80% { opacity: 0.8; }
-  91% { opacity: 0.97; }
+  0%,
+  100% {
+    opacity: 0.86;
+  }
+  18% {
+    opacity: 0.74;
+  }
+  31% {
+    opacity: 0.95;
+  }
+  47% {
+    opacity: 0.8;
+  }
+  62% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.77;
+  }
+  89% {
+    opacity: 0.92;
+  }
 }
 @keyframes torch-breathe {
   from {
-    transform: scale(0.94);
+    transform: scale(0.95);
   }
   to {
-    transform: scale(1.06);
+    transform: scale(1.05);
   }
 }
 
