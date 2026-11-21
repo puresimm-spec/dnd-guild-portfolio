@@ -71,7 +71,7 @@ export default function ChatScreen({ members }) {
       <aside className="chat-side" aria-label={t('cs_suggest_label')}>
         <div className="keeper-card">
           <div className="keeper-avatar" aria-hidden="true">
-            <PixelAvatar dndClass="Wizard" variant={4} label="Guild Keeper" />
+            <PixelAvatar dndClass="Wizard" variant={4} label="Goalkeeper" />
           </div>
           <h1>{t('cs_title')}</h1>
           <p>{t('cs_sub')}</p>
