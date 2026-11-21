@@ -12,7 +12,7 @@ const fallbackModelName = () => {
 const PRIMARY_TIMEOUT_MS = 20_000; // มีโมเดลสำรอง: รอรุ่นหลักไม่เกิน 20 วินาที แล้วสลับ
 const SINGLE_TIMEOUT_MS = 45_000; // ไม่มีโมเดลสำรอง หรือเป็นรอบของโมเดลสำรอง
 
-// error ของเราเอง เพื่อให้ index.js แยกได้ว่าพังเพราะอะไร
+// error ของเราเอง เพื่อให้ app.js แยกได้ว่าพังเพราะอะไร (ตอบผู้ใช้ด้วยสถานะ 503/502 ตามสาเหตุ)
 export class AIError extends Error {
   constructor(code, message) {
     super(message);
@@ -209,7 +209,7 @@ async function callModel(model, key, systemText, messages, { responseSchema, tem
   throw new AIError('UPSTREAM', `Gemini ตอบกลับด้วยสถานะ ${lastStatus}`);
 }
 
-// ---------- 4) ที่ปรึกษา build (บอร์ดเควสต์ในหน้ารายละเอียดสมาชิก) ----------
+// ---------- 4) ที่ปรึกษา build (บอร์ดเควสต์ในห้องฝึก build ใช้กับตัวละครตัวอย่าง) ----------
 export const STAT_KEYS = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
 
 export const BUILD_GOALS = {

@@ -8,8 +8,8 @@ import { askAI, askBuildAdvisor, AIError, BUILD_GOALS, STAT_KEYS } from './ai.js
 export const MAX_MESSAGE_LENGTH = 1000;
 const CONVERSATION_ID_PATTERN = /^[a-zA-Z0-9-]{8,64}$/;
 
-// ---------- ที่ปรึกษา build (บอร์ดเควสต์ในหน้ารายละเอียดสมาชิก) ----------
-// ค่าเหล่านี้ต้องตรงกับฝั่งหน้าเว็บ: FREE_POINTS ใน MemberScreen.jsx, STAT_MIN/STAT_MAX ใน rules.js
+// ---------- ที่ปรึกษา build (บอร์ดเควสต์ในห้องฝึก build ใช้กับตัวละครตัวอย่าง) ----------
+// ค่าเหล่านี้ต้องตรงกับฝั่งหน้าเว็บ: FREE_POINTS ใน frontend/src/MemberScreen.jsx, STAT_MIN/STAT_MAX ใน frontend/src/rules.js
 const FREE_POINTS = 4;
 const STAT_MIN = 3;
 const STAT_MAX = 20;

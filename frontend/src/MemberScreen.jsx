@@ -5,7 +5,7 @@ import { STAT_MAX, STAT_MIN, abilityMod, deriveStats, scoreOf, signed } from './
 import BuildQuestBoard from './BuildQuestBoard.jsx'
 
 // แต้มอิสระที่ผู้เยี่ยมชมย้ายไปมาเล่นได้ (ไม่ได้บันทึก ค่าจริงของตัวละครไม่เปลี่ยน)
-// ต้องตรงกับ FREE_POINTS ใน backend/src/index.js (AI ใช้คำนวณแต้มที่เหลือ)
+// ต้องตรงกับ FREE_POINTS ใน backend/src/app.js (backend ใช้ตรวจแต้ม และ AI ใช้คำนวณแต้มที่เหลือ)
 const FREE_POINTS = 4
 
 // หน้าวางแผน build ของตัวละครตัวอย่างหนึ่งตัวในห้องฝึก build (index เริ่มจาก 1)
